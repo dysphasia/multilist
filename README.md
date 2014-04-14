@@ -16,9 +16,13 @@ The MIT License (MIT) Copyright (c) 2014 Nicholas Ortenzio
 
 http://downwith.us/multilist/multilist.html
 
-### Installation
+### Usage
 
 Include droplist.js & droplist.css onto your webpage. jQuery & jQuery templates are also required.
+
+init the plugin by calling 'multilist' on a jquery object
+
+<code>$('#element').multilist(options);</code>
 
 ----------
 
@@ -179,6 +183,17 @@ droplist makes a number of methods publicly accessible without breaking jQuery o
 > **returns:** Array
 >
 > returns an array of all currently selected values
+
+
+#####init
+
+> **parameters:** *object* options
+>
+> **returns:** jQuery object
+>
+> inits the multilist plugin, same as <code>$("#elm").multilist(options);</code>
+
+
 
 #####open
 
