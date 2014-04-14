@@ -1,10 +1,10 @@
-# filters.multilist.js
+# multilist
 
 ----------
 
 ### Introduction
 
-Droplist is a jquery plugin for single and multiple select dropdown lists
+multilist is a jquery plugin multiple select dropdown lists with search / filtering functionality
 
 
 ### License
