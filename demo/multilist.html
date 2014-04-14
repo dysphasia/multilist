@@ -1,0 +1,84 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style>
+			body { margin: 20px; font-family: helvetica, arial, sans-serif; font-size:16px;}
+		</style>
+		
+		<link rel="stylesheet" type="text/css" href="../dist/css/filter.multilist.css">
+
+	</head>
+
+	<body>
+
+		<div class="container">
+			<div id="TeamID" name="TeamID"></div>
+		</div>
+
+		<script src="js/libs/jquery-1.8.3.min.js"></script>
+		<script src="js/libs/jquery.tmpl.js"></script>
+		
+		<script src="../dist/js/filter.multilist.js"></script>
+		
+		<script>
+
+			var onChange = function (value, text, toggle, $this) { 
+//				console.log(value, text, toggle, $this);
+			};
+
+			var onRemove = function ($this, value) { 
+//				console.log(value);
+			};
+
+			$("#TeamID").multilist({
+				enableSearch : true,
+				canRemove : false,
+				onChange : onChange,
+				onRemove : onRemove,
+				labelText : 'Select Teams',
+				datalist : [
+					{value:"0", 		 text: "All"},
+					{value:"1610612737", text: "Atlanta Hawks"},
+					{value:"1610612738", text: "Boston Celtics"},
+					{value:"1610612751", text: "Brooklyn Nets"},
+					{value:"1610612766", text: "Charlotte Bobcats"},
+					{value:"1610612741", text: "Chicago Bulls"},
+					{value:"1610612739", text: "Cleveland Cavaliers"},
+					{value:"1610612742", text: "Dallas Mavericks"},
+					{value:"1610612743", text: "Denver Nuggets"},
+					{value:"1610612765", text: "Detroit Pistons"},
+					{value:"1610612744", text: "Golden State Warriors"},
+					{value:"1610612745", text: "Houston Rockets"},
+					{value:"1610612754", text: "Indiana Pacers"},
+					{value:"1610612746", text: "LA Clippers"},
+					{value:"1610612747", text: "LA Lakers"},
+					{value:"1610612763", text: "Memphis Grizzlies"},
+					{value:"1610612748", text: "Miami Heat"},
+					{value:"1610612749", text: "Milwaukee Bucks"},
+					{value:"1610612750", text: "Minnesota Timberwolves"},
+					{value:"1610612740", text: "New Orleans Pelicans"},
+					{value:"1610612752", text: "New York Knicks"},
+					{value:"1610612760", text: "Oklahoma City Thunder"},
+					{value:"1610612753", text: "Orlando Magic"},
+					{value:"1610612755", text: "Philadelphia 76ers"},
+					{value:"1610612756", text: "Phoenix Suns"},
+					{value:"1610612757", text: "Portland Trail Blazers"},
+					{value:"1610612758", text: "Sacramento Kings"},
+					{value:"1610612759", text: "San Antonio Spurs"},
+					{value:"1610612761", text: "Toronto Raptors"},
+					{value:"1610612762", text: "Utah Jazz"},
+					{value:"1610612764", text: "Washington Wizards"}
+				]
+			})
+
+		</script>
+
+	</body>
+
+</html>
