@@ -1,5 +1,5 @@
 /*
- *	multilist.js 
+ *	multilist.js
  *  2014 04 14
  *	nicholas ortenzio (nicholas.ortenzio@gmail.com)
  *	requires jquery.js & jquery.tmpl.js
@@ -9,28 +9,28 @@
 (function($) {
 
 
-/*** CONFIGURATION ***/
+  /*** CONFIGURATION ***/
 
 	var pluginName = 'multilist';
 	var dataItem = 'multilistitem';
 
 
-/*** DEFAULTS ***/
+  /*** DEFAULTS ***/
 
-    var defaults = {
-        canRemove : false,
-        datalist : null,
-        enableSearch : true,
-        initWithCallback : true,
-        labelText : '',
-        maxSelected : 10,
-        onChange : function () { },
-        onRemove : function () { },
-        transitionSpeed : 'fast'
-    };
+  var defaults = {
+    canRemove: false,
+    datalist: null,
+    enableSearch: true,
+    initWithCallback: true,
+    labelText: '',
+    maxSelected: 10,
+    onChange: function () { },
+    onRemove: function () { },
+    transitionSpeed: 'fast',
+  };
 
 
-/*** CLASSES ***/
+  /*** CLASSES ***/
 
 	var selectedClass = 'selected';
 	var disabledClass = 'disabled';
@@ -41,22 +41,21 @@
 	var multiClass = 'multi';
 	var searchClass = 'search';
 
-
-/*** EVENTS ***/
+  /*** EVENTS ***/
 
 	var events = [
 		{
-			type : 'keyup',
-			selector : 'input[role="search"]',
-			callback : function ($this, $target, e) {
+			type: 'keyup',
+			selector: 'input[role="search"]',
+			callback: function ($this, $target, e) {
 				var value = $target.val().toLowerCase();
 				$this[pluginName]('filter', value);
 			}
 		},
 		{
-			type : 'click',
-			selector : 'a.label',
-			callback : function ($this, $target, e) {
+			type: 'click',
+			selector: 'a.label',
+			callback: function ($this, $target, e) {
 				e.preventDefault();
 
 				if ($this.hasClass(disabledClass)) {
@@ -72,9 +71,9 @@
 			}
 		},
 		{
-			type : 'click',
-			selector : '.items a',
-			callback : function ($this, $target, e) {
+			type: 'click',
+			selector: '.items a',
+			callback: function ($this, $target, e) {
 				e.preventDefault();
 
 				var attr = $this.data(pluginName);
@@ -105,19 +104,27 @@
 		{
 			type: 'click',
 			selector: 'a.remove',
-			callback : function ($this, $target, e) {
+			callback: function ($this, $target, e) {
 				e.preventDefault();
-				
+
 				$this[pluginName]('remove', true);
 			}
 		}
 	];
 
+  events.push({
+    type: 'click',
+    selector: '.items a div',
+    callback: function ($this, $target, e) {
+      $($target.parent()).click();
+    }
+  });
 
-/*** TEMPLATES ***/
+
+  /*** TEMPLATES ***/
 
 	var templates = {
-		base : [
+		base: [
 			'<div class="inner">',
 			'	<div class="holder label {{if canRemove}}removable{{/if}}">',
 			'		<span class="ui-sprite add">+</span>',
@@ -136,7 +143,7 @@
 			'	</div>',
 			'</div>'
 		].join(''),
-		items : [
+		items: [
 			'<li>',
 			'	<a href="#" role="option" value="${value}" class="item {{if selected}}selected{{/if}}" title="${description}" >',
 			'		<div class="ui-sprite checkbox"></div>',
@@ -151,18 +158,18 @@
 	});
 
 
-/*** API ***/
+  /*** API ***/
 
 	var methods = {
 
-		init : function(options) {
-		
+		init: function(options) {
+
 			var attr = $.extend({}, defaults, options);
 
 			return this.each(function () {
 				var $this = $(this).addClass(pluginName).attr('role','listbox').attr('aria-multiselectable', 'true').show();
 				var t = this;
-				
+
 				$.tmpl('base', attr).appendTo($this);
 
 				$.each(events, function (i, n) {
@@ -186,8 +193,8 @@
 				$this.data(pluginName, attr);
 			});
 		},
-		
-		close : function ($this, attr) {
+
+		close: function ($this, attr) {
 			var isOpen = $this.hasClass(openClass);
 
 			if (!isOpen) {
@@ -205,7 +212,7 @@
 			});
 		},
 
-		deselect : function ($this, attr, value, shouldCallback) {
+		deselect: function ($this, attr, value, shouldCallback) {
 			var $elm = attr.$items.filter('[value="' + value + '"]');
 
 			if ($elm.length===0) {
@@ -217,23 +224,23 @@
 			var ser = $this.find('.'+selectedClass).map(function() { return $(this).attr('value'); }).splice(0).join("|");
 
 			$this.attr('value', ser).attr('aria-valuetext', ser);
-		
+
 			if (shouldCallback) {
 				attr.onChange([], $this);
 			}
 		},
 
-		disable : function ($this, attr) {
+		disable: function ($this, attr) {
 
 			$this.addClass(disabledClass);
 		},
-			
-		enable : function ($this, attr) {
+
+		enable: function ($this, attr) {
 
 			$this.removeClass(disabledClass);
 		},
 
-		filter : function ($this, attr, value) {
+		filter: function ($this, attr, value) {
 			var $items = attr.$items;
 
 			if (value.length<3) {
@@ -243,8 +250,8 @@
 
 			$.each($items, filterFilters.bind(this, value));
 		},
-		
-		getSelected : function ($this, attr) {
+
+		getSelected: function ($this, attr) {
 			var $selected = attr.$items.filter('.'+selectedClass);
 
 			var arr = $.map($selected, function (n,i) {
@@ -254,7 +261,7 @@
 			return arr;
 		},
 
-		open : function ($this, attr) {
+		open: function ($this, attr) {
 			if (attr.enableSearch) {
 				attr.$shold.show();
 				attr.$search.focus();
@@ -265,7 +272,7 @@
 			});
 		},
 
-		remove : function ($this, attr, shouldCallback) {
+		remove: function ($this, attr, shouldCallback) {
 			if (shouldCallback) {
 				attr.onRemove($this);
 			}
@@ -273,16 +280,16 @@
 			$this.remove();
 		},
 
-		serialize : function ($this, attr) {
+		serialize: function ($this, attr) {
 			var $selected = attr.$items.filter('.'+selectedClass);
 			var serial = $.map($selected, function(n,i) { return $(n).attr('value'); }).join("|");
-			
+
 			$this.attr('value', serial).attr('aria-valuetext', serial);
 
 			return serial;
 		},
 
-		setValue : function ($this, attr, value, shouldCallback) {
+		setValue: function ($this, attr, value, shouldCallback) {
 			var vals = value.split("|");
 
 			for (var i in vals) {
@@ -300,7 +307,7 @@
 			}
 		},
 
-		updateItems : function ($this, attr) {
+		updateItems: function ($this, attr) {
 			attr.$items = $this.find("> ul > li > a");
 			methods.setLabel(data);
 		}
@@ -308,7 +315,7 @@
 	};
 
 
-/*** PRIVATE METHODS ***/
+  /*** PRIVATE METHODS ***/
 
 	var filterFilters = function (value, i, elm) {
 		var $elm = $(elm);
@@ -325,7 +332,7 @@
 			$elm.removeClass(filteredClass);
 			return;
 		}
-		
+
 		if (data && data.fields) {
 			for (var x=0; x<data.fields.length; x+=1) {
 				var field = data.fields[x].toLowerCase();
@@ -340,7 +347,7 @@
 	};
 
 
-/*** COURIERS ***/
+  /*** COURIERS ***/
 
 	var eventCurry = function (callback, e) {
 		var $this = $(this);
@@ -349,7 +356,7 @@
 	};
 
 
-/*** MODULE DEFINITION ***/
+  /*** MODULE DEFINITION ***/
 
 	$.fn[pluginName] = function (method) {
 		if ( methods[method] ) {
