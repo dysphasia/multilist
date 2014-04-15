@@ -1,5 +1,5 @@
 /*
- *	multilist.js 
+ *	multilist.js
  *  2014 04 14
  *	nicholas ortenzio (nicholas.ortenzio@gmail.com)
  *	requires jquery.js & jquery.tmpl.js
@@ -40,7 +40,6 @@
 	var labelClass = 'label';
 	var multiClass = 'multi';
 	var searchClass = 'search';
-
 
 /*** EVENTS ***/
 
@@ -107,11 +106,19 @@
 			selector: 'a.remove',
 			callback : function ($this, $target, e) {
 				e.preventDefault();
-				
+
 				$this[pluginName]('remove', true);
 			}
 		}
 	];
+
+  events.push({
+    type: 'click',
+    selector: '.items a div',
+    callback: function($this, $target, e) {
+      $($target.parent()).click();
+    }
+  });
 
 
 /*** TEMPLATES ***/
@@ -156,13 +163,13 @@
 	var methods = {
 
 		init : function(options) {
-		
+
 			var attr = $.extend({}, defaults, options);
 
 			return this.each(function () {
 				var $this = $(this).addClass(pluginName).attr('role','listbox').attr('aria-multiselectable', 'true').show();
 				var t = this;
-				
+
 				$.tmpl('base', attr).appendTo($this);
 
 				$.each(events, function (i, n) {
@@ -186,7 +193,7 @@
 				$this.data(pluginName, attr);
 			});
 		},
-		
+
 		close : function ($this, attr) {
 			var isOpen = $this.hasClass(openClass);
 
@@ -217,7 +224,7 @@
 			var ser = $this.find('.'+selectedClass).map(function() { return $(this).attr('value'); }).splice(0).join("|");
 
 			$this.attr('value', ser).attr('aria-valuetext', ser);
-		
+
 			if (shouldCallback) {
 				attr.onChange([], $this);
 			}
@@ -227,7 +234,7 @@
 
 			$this.addClass(disabledClass);
 		},
-			
+
 		enable : function ($this, attr) {
 
 			$this.removeClass(disabledClass);
@@ -243,7 +250,7 @@
 
 			$.each($items, filterFilters.bind(this, value));
 		},
-		
+
 		getSelected : function ($this, attr) {
 			var $selected = attr.$items.filter('.'+selectedClass);
 
@@ -276,7 +283,7 @@
 		serialize : function ($this, attr) {
 			var $selected = attr.$items.filter('.'+selectedClass);
 			var serial = $.map($selected, function(n,i) { return $(n).attr('value'); }).join("|");
-			
+
 			$this.attr('value', serial).attr('aria-valuetext', serial);
 
 			return serial;
@@ -325,7 +332,7 @@
 			$elm.removeClass(filteredClass);
 			return;
 		}
-		
+
 		if (data && data.fields) {
 			for (var x=0; x<data.fields.length; x+=1) {
 				var field = data.fields[x].toLowerCase();
