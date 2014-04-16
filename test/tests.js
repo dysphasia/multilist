@@ -1,10 +1,7 @@
 (function (T, $) {
-  var $doc, $body, $target, datalist;
+  var $target, $toggle, datalist;
 
   T.testStart(function () {
-    $doc = $(document);
-    $body = $(document.body).append('<div id="target" />');
-    $target = $('div#target');
     $.fx.off = true;
     datalist = [
       {value: 1, text: 'foo'},
@@ -15,32 +12,36 @@
   });
 
   T.testDone(function () {
-    $target.remove();
+    destroyMultilist();
     $.fx.off = false;
   });
 
+  var destroyMultilist = function() {
+    if ($target) {
+      $target.remove();
+      $target = null;
+    }
+  };
+
   var initMultilist = function(options) {
+    destroyMultilist();
+    $(document.body).append('<div id="target" style="display: none;" />');
+    $target = $('div#target');
     $target.multilist(options || {
       datalist: datalist
     });
+    $toggle = $('a.label', $target);
   };
 
   /*** INIT ***/
 
   T.module('init');
 
-  T.test('adds proper attributes to the target', function() {
+  T.test('adds proper attributes to and shows the target', function() {
     initMultilist();
 
     T.equal($target.attr('role'), 'listbox');
     T.equal($target.attr('aria-multiselectable'), 'true');
-  });
-
-  T.test('shows target', function() {
-    $target.hide();
-
-    initMultilist();
-
     T.ok($target.is(':visible'), 'Target should be made visible');
   });
 
@@ -71,16 +72,14 @@
     var $searchHolder = $('div.search', $target);
     var $search = $('input[role="search"]', $searchHolder);
 
-    T.ok(!$searchHolder.is(':visible'), 'Search element should not be visible before test');
-
-    $target.trigger('click');
+    $toggle.trigger('click');
 
     T.ok($searchHolder.is(':visible'), 'Search element holder should be made visible');
     T.ok($search.is(':focus'), 'Search element should have focus');
   });
 
   T.test('shows items', function() {
-    $target.trigger('click');
+    $toggle.trigger('click');
 
     var $items = $('div.items', $target);
 
@@ -89,7 +88,7 @@
   });
 
   T.test('adds `opened\' css class', function() {
-    $target.trigger('click');
+    $toggle.trigger('click');
 
     T.ok($target.hasClass('opened'), 'Target should have `opened\' css class');
   });
@@ -99,7 +98,7 @@
   T.module('click when open', {
     setup: function() {
       initMultilist();
-      $.fn.multilist.call($target, 'open');
+      $toggle.trigger('click');
     }
   });
 
@@ -110,8 +109,7 @@
     $search.val('foo');
     $items.addClass('filtered');
 
-    // have to call manually for whatever reason
-    $.fn.multilist.call($target, 'close');
+    $toggle.trigger('click');
 
     T.ok(!$searchHolder.is(':visible'), 'Search element holder should be hidden');
     T.equal($search.val(), '');
@@ -121,10 +119,7 @@
   });
 
   T.test('removes `opened\' css class', function() {
-    T.ok($target.hasClass('opened'), 'Target should start test with `opened\' class');
-
-    // have to call manually for whatever reason
-    $.fn.multilist.call($target, 'close');
+    $toggle.trigger('click');
 
     T.ok(!$target.hasClass('opened'), 'Should remove `opened\' class');
   });
@@ -134,12 +129,27 @@
   T.module('search box keyup', {
     setup: function() {
       initMultilist();
-      $.fn.multilist.call($target, 'open');
+      $toggle.trigger('click');
     }
   });
 
   T.test('does nothing when less than 3 characters entered', function() {
     var $search = $('.holder.search input', $target);
+    var item = datalist[0];
 
+    $search.val(item.text.substring(0, 1));
+    $search.trigger('keyup');
+
+    T.ok(!$('.holder.items ul li a', $target).hasClass('filtered'), 'Should not filter after only 1 character');
+
+    $search.val(item.text.substring(0, 2));
+    $search.trigger('keyup');
+
+    T.ok(!$('.holder.items ul li a', $target).hasClass('filtered'), 'Should not filter after only 2 characters');
+
+    $search.val(item.text.substring(0, 3));
+    $search.trigger('keyup');
+
+    T.ok($('.holder.items ul li a', $target).hasClass('filtered'), 'Should have some items filtered');
   });
 } (QUnit, jQuery));
