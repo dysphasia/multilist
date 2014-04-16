@@ -10,6 +10,7 @@
       {value: 1, text: 'foo'},
       {value: 2, text: 'bar'},
       {value: 3, text: 'baz'},
+      {value: 4, text: 'foobar'}
     ];
   });
 
@@ -18,12 +19,18 @@
     $.fx.off = false;
   });
 
+  var initMultilist = function(options) {
+    $target.multilist(options || {
+      datalist: datalist
+    });
+  };
+
   /*** INIT ***/
 
   T.module('init');
 
   T.test('adds proper attributes to the target', function() {
-    $target.multilist();
+    initMultilist();
 
     T.equal($target.attr('role'), 'listbox');
     T.equal($target.attr('aria-multiselectable'), 'true');
@@ -32,13 +39,13 @@
   T.test('shows target', function() {
     $target.hide();
 
-    $target.multilist();
+    initMultilist();
 
     T.ok($target.is(':visible'), 'Target should be made visible');
   });
 
   T.test('renders datalist items as list items', function() {
-    $target.multilist({datalist: datalist});
+    initMultilist();
 
     var $items = $('.holder.items a', $target);
 
@@ -56,25 +63,24 @@
 
   T.module('click when closed', {
     setup: function() {
-      $target.multilist();
+      initMultilist();
     }
   });
 
   T.test('shows and focuses search', function() {
-    // focus never happens unless this is called manually
-    $.fn.multilist.call($target, 'open');
-
     var $searchHolder = $('div.search', $target);
     var $search = $('input[role="search"]', $searchHolder);
 
-    T.ok($searchHolder.length == 1, 'Search element holder should be created');
+    T.ok(!$searchHolder.is(':visible'), 'Search element should not be visible before test');
+
+    $target.trigger('click');
+
     T.ok($searchHolder.is(':visible'), 'Search element holder should be made visible');
-    T.ok($search.length == 1, 'Search element should be created');
     T.ok($search.is(':focus'), 'Search element should have focus');
   });
 
   T.test('shows items', function() {
-    $target.click();
+    $target.trigger('click');
 
     var $items = $('div.items', $target);
 
@@ -83,8 +89,7 @@
   });
 
   T.test('adds `opened\' css class', function() {
-    // have to call manually for whatever reason
-    $.fn.multilist.call($target, 'open');
+    $target.trigger('click');
 
     T.ok($target.hasClass('opened'), 'Target should have `opened\' css class');
   });
@@ -93,7 +98,7 @@
 
   T.module('click when open', {
     setup: function() {
-      $target.multilist();
+      initMultilist();
       $.fn.multilist.call($target, 'open');
     }
   });
@@ -113,5 +118,28 @@
     $items.each(function(i, e) {
       T.ok(!$(e).hasClass('filtered'));
     });
+  });
+
+  T.test('removes `opened\' css class', function() {
+    T.ok($target.hasClass('opened'), 'Target should start test with `opened\' class');
+
+    // have to call manually for whatever reason
+    $.fn.multilist.call($target, 'close');
+
+    T.ok(!$target.hasClass('opened'), 'Should remove `opened\' class');
+  });
+
+  /*** SEARCH BOX KEYUP ***/
+
+  T.module('search box keyup', {
+    setup: function() {
+      initMultilist();
+      $.fn.multilist.call($target, 'open');
+    }
+  });
+
+  T.test('does nothing when less than 3 characters entered', function() {
+    var $search = $('.holder.search input', $target);
+
   });
 } (QUnit, jQuery));
