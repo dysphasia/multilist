@@ -13,14 +13,16 @@
 
   /*** INIT ***/
 
-  T.test('Test init adds proper attributes to the target', function() {
+  T.module('init');
+
+  T.test('adds proper attributes to the target', function() {
     $target.multilist();
 
     T.equal($target.attr('role'), 'listbox');
     T.equal($target.attr('aria-multiselectable'), 'true');
   });
 
-  T.test('Test init shows target', function() {
+  T.test('shows target', function() {
     $target.hide();
 
     $target.multilist();
@@ -30,7 +32,9 @@
 
   /*** OPEN ***/
 
-  T.test('Test clicking on target shows search', function() {
+  T.module('open');
+
+  T.test('shows search', function() {
     $target.multilist();
 
     $target.click();
@@ -41,7 +45,7 @@
     T.ok($search.is(':visible'), 'Search element should be made visible');
   });
 
-  T.test('Test clicking on target shows items', function() {
+  T.test('shows items', function() {
     $target.multilist();
 
     $target.click();
