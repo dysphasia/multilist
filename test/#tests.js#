@@ -1,0 +1,9 @@
+(function (T, $) {
+
+  var doc = $(document),
+    context = $('#input').multilist();
+
+  T.test('Test Toggle', function () {
+    expect(2);
+  });
+} (QUnit, jQuery));

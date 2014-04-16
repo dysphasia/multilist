@@ -8,12 +8,10 @@
 
 (function($) {
 
-
   /*** CONFIGURATION ***/
 
 	var pluginName = 'multilist';
 	var dataItem = 'multilistitem';
-
 
   /*** DEFAULTS ***/
 
@@ -24,11 +22,10 @@
     initWithCallback: true,
     labelText: '',
     maxSelected: 10,
-    onChange: function () { },
-    onRemove: function () { },
+    onChange: function () {},
+    onRemove: function () {},
     transitionSpeed: 'fast',
   };
-
 
   /*** CLASSES ***/
 
