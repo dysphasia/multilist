@@ -8,7 +8,7 @@
 	div.multilist .holder { min-width:200px; }
 
 	div.multilist .holder.label a.remove { position:absolute; right:5px; }
-	div.multilist .holder.label span.add { display:block; position:absolute; left:3px; top:8px; width:18px; height:18px; 	text-indent:-10000px; }
+	div.multilist .holder.label span.add { display:block; position:absolute; left:3px; top:8px; width:18px; height:18px; text-indent:-10000px; cursor: pointer; }
 	div.multilist .holder.label a.label { border:none; display:block; height:2em; line-height:2em; padding : 5px 5px 5px 25px; margin:0; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; cursor:pointer; }
 	div.multilist .holder.label a.label > span.labeltext { padding-right:10px; }
 	div.multilist .holder.label a.remove { display:block; position: absolute; right:0px; top:0px; width:25px; height:34px; text-transform: uppercase; font-size:10px; background-color:#06c; color: #fff; line-height: 34px; text-align:center;}
