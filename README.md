@@ -87,7 +87,7 @@ init the plugin by calling 'multilist' on a jquery object
 > Limit the amount of items that maybe selected at once
 
 
-#####OnChange
+#####onChange
 
 > **type:** function 
 
@@ -97,7 +97,7 @@ init the plugin by calling 'multilist' on a jquery object
 
 
 
-#####onremove
+#####onRemove
 
 > **type:** function 
 
