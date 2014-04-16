@@ -1,11 +1,16 @@
 (function (T, $) {
-  var $doc, $body, $target;
+  var $doc, $body, $target, datalist;
 
   T.testStart(function () {
     $doc = $(document);
     $body = $(document.body).append('<div id="target" />');
     $target = $('div#target');
     $.fx.off = true;
+    datalist = [
+      {value: 1, text: 'foo'},
+      {value: 2, text: 'bar'},
+      {value: 3, text: 'baz'},
+    ];
   });
 
   T.testDone(function () {
@@ -32,7 +37,22 @@
     T.ok($target.is(':visible'), 'Target should be made visible');
   });
 
-  /*** CLICK WHEN OPEN ***/
+  T.test('renders datalist items as list items', function() {
+    $target.multilist({datalist: datalist});
+
+    var $items = $('.holder.items a', $target);
+
+    T.equal($items.length, datalist.length);
+    $items.each(function(i, e) {
+      var item = datalist[i];
+      var $e = $(e);
+
+      T.equal($e.attr('value'), item.value);
+      T.equal($e.text().trim(), item.text);
+    });
+  });
+
+  /*** CLICK WHEN CLOSED ***/
 
   T.module('click when closed', {
     setup: function() {
@@ -69,7 +89,7 @@
     T.ok($target.hasClass('opened'), 'Target should have `opened\' css class');
   });
 
-  /*** CLICK WHEN CLOSED ***/
+  /*** CLICK WHEN OPEN ***/
 
   T.module('click when open', {
     setup: function() {
@@ -78,10 +98,10 @@
     }
   });
 
-  T.test('clears the search', function() {
+  T.test('clears the search and filters', function() {
     var $searchHolder = $('div.search', $target);
     var $search = $('input[role="search"]', $searchHolder);
-    var $items = $('div.items', $target);
+    var $items = $('.holder.items a', $target);
     $search.val('foo');
     $items.addClass('filtered');
 
@@ -90,6 +110,8 @@
 
     T.ok(!$searchHolder.is(':visible'), 'Search element holder should be hidden');
     T.equal($search.val(), '');
-    T.ok(!$items.hasClass('filtered'), 'Items holder element should no longer have `filtered\' css class');
+    $items.each(function(i, e) {
+      T.ok(!$(e).hasClass('filtered'));
+    });
   });
 } (QUnit, jQuery));
