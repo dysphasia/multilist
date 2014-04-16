@@ -152,4 +152,16 @@
 
     T.ok($('.holder.items ul li a', $target).hasClass('filtered'), 'Should have some items filtered');
   });
+
+  T.test('filters items that don\'t match the entered text', function() {
+    var $search = $('.holder.search input', $target);
+    var searchStr = 'foo';
+
+    $search.val(searchStr);
+    $search.trigger('keyup');
+
+    $('a.filtered', $target).each(function(i, e) {
+      T.equal($(e).text().indexOf(searchStr), -1);
+    });
+  });
 } (QUnit, jQuery));
