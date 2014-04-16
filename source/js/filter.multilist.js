@@ -113,10 +113,17 @@
     type: 'click',
     selector: '.items a div',
     callback: function ($this, $target, e) {
-      $($target.parent()).click();
+      $($target.parent()).trigger('click');
     }
   });
 
+  events.push({
+    type: 'click',
+    selector: 'div.label span.add',
+    callback: function ($this, $target, e) {
+      $('a.label', $target.parent()).trigger('click');
+    }
+  });
 
   /*** TEMPLATES ***/
 
