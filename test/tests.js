@@ -17,7 +17,7 @@
       {value: 11, text: 'plugh'},
       {value: 12, text: 'xyzzy'},
       {value: 13, text: 'thud'},
-      {value: 14, text: 'foobar'},
+      {value: 14, text: 'foobar'}
     ];
   });
 
@@ -53,6 +53,10 @@
     }
 
     return ret;
+  };
+
+  String.prototype.trim = String.prototype.trim || function() {
+    return this.replace(/^\s+|\s+$/g, '');
   };
 
   /*** INIT ***/

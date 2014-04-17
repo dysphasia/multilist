@@ -51,8 +51,6 @@
     closeOnMax: false,
     onChange: function () {},
     onRemove: function () {},
-    onChange: function () { },
-    onRemove: function () { },
     transitionSpeed: 'fast',
   };
 
