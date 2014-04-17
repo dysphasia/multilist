@@ -37,6 +37,15 @@ init the plugin by calling 'multilist' on a jquery object
 
 > If set to true, droplist control will be initiated with a remove button. Using the close button will trigger the onRemove callback  option, if provided
 
+#####closeOnMax
+
+> **type:** Boolean
+
+> **Default:** false
+
+> if true, will trigger the plugin to close when the number of selected items is equal to the value of the maxSelected option
+
+
 
 #####datalist
 > **type:** Object Array (optional)
