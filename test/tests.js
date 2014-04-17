@@ -60,9 +60,17 @@
     });
   });
 
+  T.test('renders selected items as selected', function() {
+    datalist[0].selected = datalist[1].selected = true;
+
+    initMultilist();
+
+    T.equal($('.holder.items a.selected', $target).length, 2);
+  });
+
   /*** CLICK WHEN CLOSED ***/
 
-  T.module('click when closed', {
+  T.module('label click when closed', {
     setup: function() {
       initMultilist();
     }
@@ -95,7 +103,7 @@
 
   /*** CLICK WHEN OPEN ***/
 
-  T.module('click when open', {
+  T.module('label click when open', {
     setup: function() {
       initMultilist();
       $toggle.trigger('click');
@@ -140,20 +148,20 @@
     $search.val(item.text.substring(0, 1));
     $search.trigger('keyup');
 
-    T.ok(!$('.holder.items ul li a', $target).hasClass('filtered'), 'Should not filter after only 1 character');
+    T.ok(!$('.holder.items a', $target).hasClass('filtered'), 'Should not filter after only 1 character');
 
     $search.val(item.text.substring(0, 2));
     $search.trigger('keyup');
 
-    T.ok(!$('.holder.items ul li a', $target).hasClass('filtered'), 'Should not filter after only 2 characters');
+    T.ok(!$('.holder.items a', $target).hasClass('filtered'), 'Should not filter after only 2 characters');
 
     $search.val(item.text.substring(0, 3));
     $search.trigger('keyup');
 
-    T.ok($('.holder.items ul li a', $target).hasClass('filtered'), 'Should have some items filtered');
+    T.ok($('.holder.items a', $target).hasClass('filtered'), 'Should have some items filtered');
   });
 
-  T.test('filters items that don\'t match the entered text', function() {
+  T.test('filters items which don\'t match the entered text', function() {
     var $search = $('.holder.search input', $target);
     var searchStr = 'foo';
 
@@ -164,4 +172,9 @@
       T.equal($(e).text().indexOf(searchStr), -1);
     });
   });
+
+  T.module('list item click when unselected');
+
+  T.module('list item click when selected');
+
 } (QUnit, jQuery));
