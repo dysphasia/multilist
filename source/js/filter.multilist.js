@@ -8,12 +8,36 @@
 
 (function($) {
 
+  /*** SHIMS ***/
+
+  if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+      if (typeof this !== "function") {
+        // closest thing possible to the ECMAScript 5 internal IsCallable function
+        throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+      }
+
+      var aArgs = Array.prototype.slice.call(arguments, 1),
+      fToBind = this,
+      fNOP = function () {},
+      fBound = function () {
+        return fToBind.apply(this instanceof fNOP && oThis
+                             ? this
+                             : oThis,
+                             aArgs.concat(Array.prototype.slice.call(arguments)));
+      };
+
+      fNOP.prototype = this.prototype;
+      fBound.prototype = new fNOP();
+
+      return fBound;
+    };
+  }
 
   /*** CONFIGURATION ***/
 
 	var pluginName = 'multilist';
 	var dataItem = 'multilistitem';
-
 
   /*** DEFAULTS ***/
 
@@ -25,11 +49,10 @@
     labelText: '',
     maxSelected: 10,
     closeOnMax: false,
-    onChange: function () { },
-    onRemove: function () { },
+    onChange: function () {},
+    onRemove: function () {},
     transitionSpeed: 'fast',
   };
-
 
   /*** CLASSES ***/
 
@@ -63,12 +86,7 @@
 					return;
 				}
 
-				if ($this.hasClass(openClass)) {
-					$this[pluginName]('close');
-					return;
-				}
-
-				$this[pluginName]('open');
+        $this[pluginName]($this.hasClass(openClass) ? 'close' : 'open');
 			}
 		},
 		{
@@ -81,25 +99,15 @@
 				var value = $target.attr('value');
 				var text = $target.text();
 
-				if ($target.hasClass(disabledClass)){
-					return;
-				}
+        if ($target.hasClass(disabledClass) ||
+            (!$target.hasClass(selectedClass) && attr.maxSelected > 0 && getNumSelected($this) >= attr.maxSelected)) {
+          return;
+        }
 
-				var numSelected = $this.find('.' + selectedClass).length;
-				var toggle = !$target.hasClass(selectedClass);
+        $target.toggleClass(selectedClass);
+				attr.onChange(value, text, $target.hasClass(selectedClass), $this);
 
-				if (!toggle) { // remove
-					$target.toggleClass(selectedClass);
-					attr.onChange(value, text, toggle, $this);
-				} else { // add
-					if (attr.maxSelected>1 && numSelected >= attr.maxSelected) {
-						return;
-					}
-					$target.toggleClass(selectedClass);
-					attr.onChange(value, text, toggle, $this);
-				}
-
-				if (attr.maxSelected==numSelected && attr.closeOnMax) {
+				if (attr.maxSelected == getNumSelected($this) && attr.closeOnMax) {
 					$this[pluginName]('close');
 				}
 
@@ -121,10 +129,17 @@
     type: 'click',
     selector: '.items a div',
     callback: function ($this, $target, e) {
-      $($target.parent()).click();
+      $($target.parent()).trigger('click');
     }
   });
 
+  events.push({
+    type: 'click',
+    selector: 'div.label span.add',
+    callback: function ($this, $target, e) {
+      $('a.label', $target.parent()).trigger('click');
+    }
+  });
 
   /*** TEMPLATES ***/
 
@@ -350,6 +365,10 @@
 
 		$elm.addClass(filteredClass);
 	};
+
+  var getNumSelected = function($this) {
+    return $this.find('.' + selectedClass).length;
+  };
 
 
   /*** COURIERS ***/

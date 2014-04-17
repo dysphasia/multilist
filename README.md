@@ -14,7 +14,11 @@ The MIT License (MIT) Copyright (c) 2014 Nicholas Ortenzio
 
 ### Demo
 
-http://downwith.us/multilist/multilist.html
+http://rawgit.com/functionreturnfunction/multilist/master/demo/multilist.html
+
+### Tests
+
+http://rawgit.com/functionreturnfunction/multilist/master/test/test.html
 
 ### Usage
 
@@ -93,10 +97,10 @@ init the plugin by calling 'multilist' on a jquery object
 >
 > **Default:** 10
 >
-> Limit the amount of items that maybe selected at once
+> Limit the amount of items that may be selected at once.  Set to `0' for no limit
 
 
-#####OnChange
+#####onChange
 
 > **type:** function 
 
@@ -106,7 +110,7 @@ init the plugin by calling 'multilist' on a jquery object
 
 
 
-#####onremove
+#####onRemove
 
 > **type:** function 
 

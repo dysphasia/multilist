@@ -19,10 +19,11 @@
 
 		<div class="container">
 			<div id="TeamID" name="TeamID"></div>
+                        <div id="OtherID" name="OtherID"></div>
 		</div>
 
-		<script src="js/libs/jquery-1.8.3.min.js"></script>
-		<script src="js/libs/jquery.tmpl.js"></script>
+		<script src="../lib/js/jquery-1.8.3.min.js"></script>
+		<script src="../lib/js/jquery.tmpl.js"></script>
 		
 		<script src="../source/js/filter.multilist.js"></script>
 		
@@ -75,8 +76,28 @@
 					{value:"1610612762", text: "Utah Jazz"},
 					{value:"1610612764", text: "Washington Wizards"}
 				]
-			})
+			});
 
+                        $('#OtherID').multilist({
+				maxSelected: 2,
+				closeOnMax: true,
+				labelText: 'Select Some Stuff',
+				datalist: [
+					{value: 1, text: 'foo'},
+					{value: 2, text: 'bar'},
+					{value: 3, text: 'baz'},
+					{value: 4, text: 'qux'},
+					{value: 5, text: 'quux'},
+					{value: 6, text: 'corge'},
+					{value: 7, text: 'grault'},
+					{value: 8, text: 'garply'},
+					{value: 9, text: 'waldo'},
+					{value: 10, text: 'fred'},
+					{value: 11, text: 'plugh'},
+					{value: 12, text: 'xyzzy'},
+					{value: 13, text: 'thud'},
+					{value: 14, text: 'foobar'},
+                        ]});
 		</script>
 
 	</body>
