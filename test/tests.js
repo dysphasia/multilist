@@ -248,7 +248,7 @@
 
   T.module('list item click when selected', {
     setup: function() {
-      initMultilist();
+      initMultilist({datalist: datalist, maxSelected: 0});
       $toggle.trigger('click');
       $items.first().trigger('click');
     }
@@ -258,6 +258,12 @@
     $items.first().trigger('click');
 
     T.ok(!$items.first().hasClass('selected'), 'Should not be selected after selecting and deselecting');
+  });
+
+  T.test('serializes the remaining chosen values', function() {
+    $items.trigger('click');
+
+    T.equal($target.val(), datalist.slice(1, datalist.length).map(function(x) {return x.value;}).join('|'), 'All values except the first should be serialized')
   });
 
 } (QUnit, jQuery));
