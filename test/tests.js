@@ -55,19 +55,6 @@
     return ret;
   };
 
-  Array.prototype.filter = Array.prototype.filter || function(fn, thisArg) {
-    var ret = [], cur = null;
-
-    for (var i = 0; i < this.length; ++i) {
-      cur = this[i];
-      if (fn.call(thisArg || undefined, cur)) {
-        ret.push(cur);
-      }
-    }
-
-    return ret;
-  };
-
   /*** INIT ***/
 
   T.module('init');
@@ -198,7 +185,11 @@
 
     $('a.filtered', $target).each(function(i, e) {
       var text = $(e).text();
-      T.equal(text.indexOf(searchStr), -1, 'Item with text `' + text.trim() + '\' which does not match `' + searchStr + '\' should be filtered');
+      T.equal(text.indexOf(searchStr), -1, 'Item with text `' + text.trim() + '\' which does not match search string `' + searchStr + '\' should be filtered');
+    });
+
+    $($items.filter(function(i) {return $(this).text().indexOf(searchStr) > -1})).each(function(i, e) {
+      T.ok(true, 'Item with text `' + $(e).text() + '\' should be found to match search string `' + searchStr + '\'');
     });
   });
 
