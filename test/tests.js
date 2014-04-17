@@ -45,12 +45,24 @@
     $search = $('.holder.search input[role="search"]', $target);
   };
 
-  // add this if js doesn't already have it
   Array.prototype.map = Array.prototype.map || function(fn) {
     var ret = [];
 
     for (var i = 0; i < this.length; ++i) {
       ret.push(fn(this[i]));
+    }
+
+    return ret;
+  };
+
+  Array.prototype.filter = Array.prototype.filter || function(fn, thisArg) {
+    var ret = [], cur = null;
+
+    for (var i = 0; i < this.length; ++i) {
+      cur = this[i];
+      if (fn.call(thisArg || undefined, cur)) {
+        ret.push(cur);
+      }
     }
 
     return ret;
@@ -63,21 +75,21 @@
   T.test('adds proper attributes to and shows the target', function() {
     initMultilist();
 
-    T.equal($target.attr('role'), 'listbox');
-    T.equal($target.attr('aria-multiselectable'), 'true');
+    T.equal($target.attr('role'), 'listbox', '`role\' attribute should be set to `listbox\'');
+    T.equal($target.attr('aria-multiselectable'), 'true', '`aria-multiselectable\' attribute should be set to `true\'');
     T.ok($target.is(':visible'), 'Target should be made visible');
   });
 
   T.test('renders datalist items as list items', function() {
     initMultilist();
 
-    T.equal($items.length, datalist.length);
+    T.equal($items.length, datalist.length, 'Should render all the items from the datalist (and no more)');
     $items.each(function(i, e) {
       var item = datalist[i];
       var $e = $(e);
 
-      T.equal($e.attr('value'), item.value);
-      T.equal($e.text().trim(), item.text);
+      T.equal($e.attr('value'), item.value, '`value\' attribute of item should be set to datalist item value');
+      T.equal($e.text().trim(), item.text, 'Text of item should contain datalist item text');
     });
   });
 
@@ -86,7 +98,7 @@
 
     initMultilist();
 
-    T.equal($('.holder.items a.selected', $target).length, 2);
+    T.equal($('.holder.items a.selected', $target).length, 2, 'Number of items with `selected\' css class should equal number of items selected');
   });
 
   /*** CLICK WHEN CLOSED ***/
@@ -138,9 +150,9 @@
     $toggle.trigger('click');
 
     T.ok(!$searchHolder.is(':visible'), 'Search element holder should be hidden');
-    T.equal($search.val(), '');
+    T.equal($search.val(), '', 'Search string should be cleared');
     $items.each(function(i, e) {
-      T.ok(!$(e).hasClass('filtered'));
+      T.ok(!$(e).hasClass('filtered'), 'Item should not be filtered');
     });
   });
 
@@ -185,7 +197,8 @@
     $search.trigger('keyup');
 
     $('a.filtered', $target).each(function(i, e) {
-      T.equal($(e).text().indexOf(searchStr), -1);
+      var text = $(e).text();
+      T.equal(text.indexOf(searchStr), -1, 'Item with text `' + text.trim() + '\' which does not match `' + searchStr + '\' should be filtered');
     });
   });
 
@@ -238,7 +251,7 @@
 
       $($items.slice(0, i)).trigger('click');
 
-      T.equal($target.val(), datalist.slice(0, i).map(function(x) {return x.value;}).join('|'));
+      T.equal($target.val(), datalist.slice(0, i).map(function(x) {return x.value;}).join('|'), 'All chosen values should be serialized');
     }
   });
 
