@@ -173,7 +173,40 @@
     });
   });
 
-  T.module('list item click when unselected');
+  T.module('list item click when unselected', {
+    setup: function() {
+      initMultilist();
+      $toggle.trigger('click');
+    }
+  });
+
+  T.test('selects the clicked item', function() {
+    var $firstItem = $('.holder.items a', $target).first().trigger('click');
+
+    T.ok($firstItem.hasClass('selected'), 'Should be selected after clicking');
+  });
+
+  T.test('calls onChange if set', function() {
+    var called = false;
+    initMultilist({datalist: datalist, onChange: function() {
+      called = true;
+    }});
+
+    $('.holder.items a', $target).first().trigger('click');
+
+    T.ok(called, 'Should call the onChange callback');
+  });
+
+  T.test('does not select item when maxSelected already reached', function() {
+    initMultilist({datalist: datalist, maxSelected: 1});
+    var $items = $('.holder.items a', $target);
+    var $second = $($items[1]);
+    $items.first().trigger('click');
+
+    $second.trigger('click');
+
+    T.ok(!$second.hasClass('selected'), 'Should not select item and exceed maxSelected');
+  });
 
   T.module('list item click when selected');
 

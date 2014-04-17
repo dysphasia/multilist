@@ -83,7 +83,7 @@
 					$target.toggleClass(selectedClass);
 					attr.onChange(value, text, toggle, $this);
 				} else { // add
-					if (attr.maxSelected>1 && numSelected >= attr.maxSelected) {
+					if (attr.maxSelected > 0 && numSelected >= attr.maxSelected) {
 						return;
 					}
 					$target.toggleClass(selectedClass);
