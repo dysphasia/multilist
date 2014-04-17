@@ -88,7 +88,7 @@ init the plugin by calling 'multilist' on a jquery object
 >
 > **Default:** 10
 >
-> Limit the amount of items that maybe selected at once
+> Limit the amount of items that may be selected at once.  Set to `0' for no limit
 
 
 #####onChange
