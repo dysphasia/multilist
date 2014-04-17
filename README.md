@@ -14,11 +14,11 @@ The MIT License (MIT) Copyright (c) 2014 Nicholas Ortenzio
 
 ### Demo
 
-http://rawgit.com/functionreturnfunction/multilist/testing/demo/multilist.html
+http://rawgit.com/functionreturnfunction/multilist/master/demo/multilist.html
 
 ### Tests
 
-http://rawgit.com/functionreturnfunction/multilist/testing/test/test.html
+http://rawgit.com/functionreturnfunction/multilist/master/test/test.html
 
 ### Usage
 
