@@ -59,7 +59,7 @@
 					return;
 				}
 
-        $this[pluginName]($this.hasClass(openClass) ? 'close', 'open');
+        $this[pluginName]($this.hasClass(openClass) ? 'close' : 'open');
 			}
 		},
 		{
