@@ -75,22 +75,13 @@
 				var value = $target.attr('value');
 				var text = $target.text();
 
-				if ($target.hasClass(disabledClass)){
-					return;
-				}
+        if ($target.hasClass(disabledClass) ||
+            (!$target.hasClass(selectedClass) && attr.maxSelected > 0 && getNumSelected($this) >= attr.maxSelected)) {
+          return;
+        }
 
-				var toggle = !$target.hasClass(selectedClass);
-
-				if (!toggle) { // remove
-					$target.toggleClass(selectedClass);
-					attr.onChange(value, text, toggle, $this);
-				} else { // add
-					if (attr.maxSelected > 0 && getNumSelected($this) >= attr.maxSelected) {
-						return;
-					}
-					$target.toggleClass(selectedClass);
-					attr.onChange(value, text, toggle, $this);
-				}
+        $target.toggleClass(selectedClass);
+				attr.onChange(value, text, $target.hasClass(selectedClass), $this);
 
 				if (attr.maxSelected == getNumSelected($this) && attr.closeOnMax) {
 					$this[pluginName]('close');
