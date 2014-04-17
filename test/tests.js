@@ -246,6 +246,17 @@
     }
   });
 
+  T.test('closes the list when closeOnMax set and maxSelected reached', function() {
+    for (var i = 1; i < datalist.length; ++i) {
+      initMultilist({datalist: datalist, maxSelected: i, closeOnMax: true});
+      $toggle.trigger('click');
+
+      $($items.slice(0, i)).trigger('click');
+
+      T.ok(!$target.hasClass('opened'), 'Reaching maxSelected should close the list');
+    }
+  });
+
   T.module('list item click when selected', {
     setup: function() {
       initMultilist({datalist: datalist, maxSelected: 0});

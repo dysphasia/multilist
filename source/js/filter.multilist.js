@@ -79,21 +79,20 @@
 					return;
 				}
 
-				var numSelected = $this.find('.' + selectedClass).length;
 				var toggle = !$target.hasClass(selectedClass);
 
 				if (!toggle) { // remove
 					$target.toggleClass(selectedClass);
 					attr.onChange(value, text, toggle, $this);
 				} else { // add
-					if (attr.maxSelected > 0 && numSelected >= attr.maxSelected) {
+					if (attr.maxSelected > 0 && getNumSelected($this) >= attr.maxSelected) {
 						return;
 					}
 					$target.toggleClass(selectedClass);
 					attr.onChange(value, text, toggle, $this);
 				}
 
-				if (attr.maxSelected==numSelected && attr.closeOnMax) {
+				if (attr.maxSelected == getNumSelected($this) && attr.closeOnMax) {
 					$this[pluginName]('close');
 				}
 
@@ -351,6 +350,10 @@
 
 		$elm.addClass(filteredClass);
 	};
+
+  var getNumSelected = function($this) {
+    return $this.find('.' + selectedClass).length;
+  };
 
 
   /*** COURIERS ***/
