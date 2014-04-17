@@ -1,5 +1,5 @@
 (function (T, $) {
-  var $target, $toggle, datalist;
+  var $target, $toggle, datalist, $items, $search;
 
   T.testStart(function () {
     $.fx.off = true;
@@ -7,7 +7,17 @@
       {value: 1, text: 'foo'},
       {value: 2, text: 'bar'},
       {value: 3, text: 'baz'},
-      {value: 4, text: 'foobar'}
+      {value: 4, text: 'qux'},
+      {value: 5, text: 'quux'},
+      {value: 6, text: 'corge'},
+      {value: 7, text: 'grault'},
+      {value: 8, text: 'garply'},
+      {value: 9, text: 'waldo'},
+      {value: 10, text: 'fred'},
+      {value: 11, text: 'plugh'},
+      {value: 12, text: 'xyzzy'},
+      {value: 13, text: 'thud'},
+      {value: 14, text: 'foobar'},
     ];
   });
 
@@ -31,6 +41,19 @@
       datalist: datalist
     });
     $toggle = $('a.label', $target);
+    $items = $('.holder.items a', $target);
+    $search = $('.holder.search input[role="search"]', $target);
+  };
+
+  // add this if js doesn't already have it
+  Array.prototype.map = Array.prototype.map || function(fn) {
+    var ret = [];
+
+    for (var i = 0; i < this.length; ++i) {
+      ret.push(fn(this[i]));
+    }
+
+    return ret;
   };
 
   /*** INIT ***/
@@ -47,8 +70,6 @@
 
   T.test('renders datalist items as list items', function() {
     initMultilist();
-
-    var $items = $('.holder.items a', $target);
 
     T.equal($items.length, datalist.length);
     $items.each(function(i, e) {
@@ -78,7 +99,6 @@
 
   T.test('shows and focuses search', function() {
     var $searchHolder = $('div.search', $target);
-    var $search = $('input[role="search"]', $searchHolder);
 
     $toggle.trigger('click');
 
@@ -89,10 +109,10 @@
   T.test('shows items', function() {
     $toggle.trigger('click');
 
-    var $items = $('div.items', $target);
+    var $itemsHolder = $('div.items', $target);
 
-    T.ok($items.length == 1, 'Items holder element should be created');
-    T.ok($items.is(':visible'), 'Items holder element should be made visible');
+    T.ok($itemsHolder.length == 1, 'Items holder element should be created');
+    T.ok($itemsHolder.is(':visible'), 'Items holder element should be made visible');
   });
 
   T.test('adds `opened\' css class', function() {
@@ -112,8 +132,6 @@
 
   T.test('clears the search and filters', function() {
     var $searchHolder = $('div.search', $target);
-    var $search = $('input[role="search"]', $searchHolder);
-    var $items = $('.holder.items a', $target);
     $search.val('foo');
     $items.addClass('filtered');
 
@@ -142,7 +160,6 @@
   });
 
   T.test('does nothing when less than 3 characters entered', function() {
-    var $search = $('.holder.search input', $target);
     var item = datalist[0];
 
     $search.val(item.text.substring(0, 1));
@@ -162,7 +179,6 @@
   });
 
   T.test('filters items which don\'t match the entered text', function() {
-    var $search = $('.holder.search input', $target);
     var searchStr = 'foo';
 
     $search.val(searchStr);
@@ -197,9 +213,17 @@
     T.ok(called, 'Should call the onChange callback');
   });
 
-  T.test('does not select item when maxSelected already reached', function() {
+  T.test('does not select item when default maxSelected of 10 already reached', function() {
+    var $tenth = $($items[10]);
+    $($items.slice(0, 10)).trigger('click');
+
+    $tenth.trigger('click');
+
+    T.ok(!$tenth.hasClass('selected'), 'Should not select item and exceed maxSelected');
+  });
+
+  T.test('allows for a maxSelected of 1', function() {
     initMultilist({datalist: datalist, maxSelected: 1});
-    var $items = $('.holder.items a', $target);
     var $second = $($items[1]);
     $items.first().trigger('click');
 
@@ -208,6 +232,28 @@
     T.ok(!$second.hasClass('selected'), 'Should not select item and exceed maxSelected');
   });
 
-  T.module('list item click when selected');
+  T.test('serializes the chosen values', function() {
+    for (var i = 1; i < datalist.length; ++i) {
+      initMultilist({datalist: datalist, maxSelected: i});
+
+      $($items.slice(0, i)).trigger('click');
+
+      T.equal($target.val(), datalist.slice(0, i).map(function(x) {return x.value;}).join('|'));
+    }
+  });
+
+  T.module('list item click when selected', {
+    setup: function() {
+      initMultilist();
+      $toggle.trigger('click');
+      $items.first().trigger('click');
+    }
+  });
+
+  T.test('deselects the item', function() {
+    $items.first().trigger('click');
+
+    T.ok(!$items.first().hasClass('selected'), 'Should not be selected after selecting and deselecting');
+  });
 
 } (QUnit, jQuery));
