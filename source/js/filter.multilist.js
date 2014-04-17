@@ -1,6 +1,6 @@
 /*
  *	multilist.js
- *  2014 04 14
+ *  2014 04 16
  *	nicholas ortenzio (nicholas.ortenzio@gmail.com)
  *	requires jquery.js & jquery.tmpl.js
  */
@@ -22,8 +22,11 @@
     initWithCallback: true,
     labelText: '',
     maxSelected: 10,
+    closeOnMax: false,
     onChange: function () {},
     onRemove: function () {},
+    onChange: function () { },
+    onRemove: function () { },
     transitionSpeed: 'fast',
   };
 
@@ -93,6 +96,10 @@
 					}
 					$target.toggleClass(selectedClass);
 					attr.onChange(value, text, toggle, $this);
+				}
+
+				if (attr.maxSelected==numSelected && attr.closeOnMax) {
+					$this[pluginName]('close');
 				}
 
 				$this[pluginName]('serialize');
