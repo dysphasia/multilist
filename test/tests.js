@@ -4,15 +4,15 @@
   T.testStart(function () {
     $.fx.off = true;
     datalist = [
-      {value: 1, text: 'foo'},
-      {value: 2, text: 'bar'},
-      {value: 3, text: 'baz'},
-      {value: 4, text: 'qux'},
-      {value: 5, text: 'quux'},
-      {value: 6, text: 'corge'},
-      {value: 7, text: 'grault'},
-      {value: 8, text: 'garply'},
-      {value: 9, text: 'waldo'},
+      {value:  1, text: 'foo'},
+      {value:  2, text: 'bar'},
+      {value:  3, text: 'baz'},
+      {value:  4, text: 'qux'},
+      {value:  5, text: 'quux'},
+      {value:  6, text: 'corge'},
+      {value:  7, text: 'grault'},
+      {value:  8, text: 'garply'},
+      {value:  9, text: 'waldo'},
       {value: 10, text: 'fred'},
       {value: 11, text: 'plugh'},
       {value: 12, text: 'xyzzy'},
@@ -279,6 +279,15 @@
     }
   });
 
+  T.test('sets the label text to the text of the selected item when single is true', function() {
+    initMultilist({datalist: datalist, single: true});
+    $toggle.trigger('click');
+
+    $items.first().trigger('click');
+
+    T.equal($('span.labeltext', $toggle).text().trim(), datalist[0].text, 'Label should show selected item');
+  });
+
   T.module('list item click when selected', {
     setup: function() {
       initMultilist({datalist: datalist, maxSelected: 0});
@@ -297,6 +306,17 @@
     $items.trigger('click');
 
     T.equal($target.val(), datalist.slice(1, datalist.length).map(function(x) {return x.value;}).join('|'), 'All values except the first should be serialized')
+  });
+
+  T.test('sets the label text back to the configured value when single is true', function() {
+    var originalText = 'this is what it said originally';
+    initMultilist({labelText: originalText, datalist: datalist, single: true});
+
+    $toggle.trigger('click');
+    $items.first().trigger('click');
+    $items.first().trigger('click');
+
+    T.equal($('span.labeltext', $toggle).text().trim(), originalText, 'Label text should be reverted when there\'s no selection');
   });
 
   T.module('remove click', {

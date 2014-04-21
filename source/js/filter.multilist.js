@@ -107,9 +107,15 @@
         $target.toggleClass(selectedClass);
 				attr.onChange(value, text, $target.hasClass(selectedClass), $this);
 
-				if (attr.maxSelected == getNumSelected($this) && attr.closeOnMax) {
+        var numSelected = getNumSelected($this);
+
+				if (attr.maxSelected == numSelected && attr.closeOnMax) {
 					$this[pluginName]('close');
 				}
+
+        if (attr.single) {
+          $('span.labeltext', attr.$label).text(numSelected ? text : attr.labelText);
+        }
 
 				$this[pluginName]('serialize');
 			}
