@@ -211,7 +211,7 @@ droplist makes a number of methods publicly accessible without breaking jQuery o
 >
 > **returns:** jQuery object
 >
-> programatically opens the options list of a droplist 
+> programatically opens the options list of a droplist
 
 
 #####remove
@@ -225,7 +225,7 @@ droplist makes a number of methods publicly accessible without breaking jQuery o
 
 #####serialize
 
-> **parameters:** 
+> **parameters:**
 >
 > **returns:** string
 >
