@@ -88,7 +88,7 @@ init the plugin by calling 'multilist' on a jquery object
 >
 > **Default:** 10
 >
-> Limit the amount of items that may be selected at once.  Set to `0' for no limit
+> Limit the amount of items that may be selected at once.  Set to '0' for no limit
 
 
 #####onChange
@@ -126,7 +126,7 @@ init the plugin by calling 'multilist' on a jquery object
 >
 > **Default:** false
 >
-> If truthy, init in single selection mode, acting more like a dropdown list. Will override `closeOnMax' to true, and `maxSelected' to 1
+> If truthy, init in single selection mode, acting more like a dropdown list. Will override 'closeOnMax' to true, and 'maxSelected' to 1
 >
 
 
@@ -136,10 +136,7 @@ init the plugin by calling 'multilist' on a jquery object
 
 droplist makes a number of methods publicly accessible without breaking jQuery object chaining.
 
-<code>$('#element').multilist('methodname', [arguments...])</code>
-
-
-
+`$('#element').multilist('methodname', [arguments...])`
 
 
 #####close
@@ -148,7 +145,7 @@ droplist makes a number of methods publicly accessible without breaking jQuery o
 >
 > **returns:** jQuery object
 >
-> closes the options list of a droplist 
+> closes the options list of a droplist
 
 
 #####deselect
