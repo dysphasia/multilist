@@ -46,13 +46,13 @@ init the plugin by calling 'multilist' on a jquery object
 > **type:** Object Array (optional)
 >
 > **Default:** *null*
->  
+>
 > If provided, the droplist will generate options for each of the items in the array. An Array object should have the following properties
 
-> 	{	 
-> 		value: (string), 
-> 		text: (string), 
-> 		selected:(true|false)[optional], 
+> 	{
+> 		value: (string),
+> 		text: (string),
+> 		selected:(true|false)[optional],
 > 		fields:([string,...])[optional]
 >		}
 
@@ -63,7 +63,7 @@ init the plugin by calling 'multilist' on a jquery object
 > **Default:** true
 >
 > controls whether the text input search field will be available
-> 
+>
 
 
 #####initWithCallback
@@ -72,13 +72,13 @@ init the plugin by calling 'multilist' on a jquery object
 > **Default:** true
 >
 > controls whether the onChange callback function will be called immediately after initialization
-> 
+>
 
 
 #####labelText
 > **type:** string (optional)
 >
-> **Default:** 
+> **Default:**
 >
 > Text label for the dropdown selector
 
@@ -93,7 +93,7 @@ init the plugin by calling 'multilist' on a jquery object
 
 #####onChange
 
-> **type:** function 
+> **type:** function
 
 > **Default:** none
 
@@ -103,7 +103,7 @@ init the plugin by calling 'multilist' on a jquery object
 
 #####onRemove
 
-> **type:** function 
+> **type:** function
 
 > **Default:** none
 
@@ -118,7 +118,16 @@ init the plugin by calling 'multilist' on a jquery object
 > **Default:** 'fast'
 >
 > A string or number determining how long the animation will run. string options are 'slow', 'fast' & 'normal'
-> 
+>
+
+#####single
+
+> **type:** boolean (optional)
+>
+> **Default:** false
+>
+> If truthy, init in single selection mode, acting more like a dropdown list. Will override `closeOnMax' to true, and `maxSelected' to 1
+>
 
 
 -------

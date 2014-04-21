@@ -92,6 +92,24 @@
     T.equal($('.holder.items a.selected', $target).length, 2, 'Number of items with `selected\' css class should equal number of items selected');
   });
 
+  T.module('init single');
+
+  T.test('sets `maxSelected\' to 1 and `closeOnMax\' to true, overriding defaults', function() {
+    initMultilist({single: true});
+    var settings = $target.data().multilist;
+
+    T.equal(1, settings.maxSelected, '`maxSelected\' should be overridden and set to 1');
+    T.ok(settings.closeOnMax, '`closeOnMax\' should be overridden and set to true');
+  });
+
+  T.test('sets `maxSelected\' to 1 and `closeOnMax\' to true, overriding provided values', function() {
+    initMultilist({single: true, maxSelected: 42, closeOnMax: false});
+    var settings = $target.data().multilist;
+
+    T.equal(1, settings.maxSelected, '`maxSelected\' should be overridden and set to 1');
+    T.ok(settings.closeOnMax, '`closeOnMax\' should be overridden and set to true');
+  });
+
   /*** CLICK WHEN CLOSED ***/
 
   T.module('label click when closed', {

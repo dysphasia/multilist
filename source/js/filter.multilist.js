@@ -52,6 +52,7 @@
     onChange: function () {},
     onRemove: function () {},
     transitionSpeed: 'fast',
+    single: false
   };
 
   /*** CLASSES ***/
@@ -207,6 +208,11 @@
 					var html = $.tmpl('items', attr.datalist);
 					attr.$list.empty().append(html);
 				}
+
+        if (attr.single) {
+          attr.closeOnMax = true;
+          attr.maxSelected = 1;
+        }
 
 				attr.$items  = attr.$list.find('a');
 
