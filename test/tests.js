@@ -124,7 +124,7 @@
     $toggle.trigger('click');
 
     T.ok($searchHolder.is(':visible'), 'Search element holder should be made visible');
-    T.ok($search.is(':focus'), 'Search element should have focus');
+    T.ok($search.is(':focus') || $search[0] == document.activeElement, 'Search element should have focus');
   });
 
   T.test('shows items', function() {
