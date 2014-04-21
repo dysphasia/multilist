@@ -281,4 +281,16 @@
     T.equal($target.val(), datalist.slice(1, datalist.length).map(function(x) {return x.value;}).join('|'), 'All values except the first should be serialized')
   });
 
+  T.module('remove click', {
+    setup: function() {
+      initMultilist({datalist: datalist, canRemove: true});
+    }
+  });
+
+  T.test('removes the target from the document completely', function() {
+    $('a.remove', $target).trigger('click');
+
+    T.equal(0, $($target.selector).length, 'Should no longer exist within the document');
+  });
+
 } (QUnit, jQuery));
