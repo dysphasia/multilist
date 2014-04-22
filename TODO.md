@@ -1,7 +1,6 @@
 ### For Version 1:
 
-1. Add a hidden input to support posting values in a form
-2. Ajax support for loading data items and searching/filtering
+1. Ajax support for loading data items and searching/filtering
 
 ### General/Issues:
 

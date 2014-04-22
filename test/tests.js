@@ -1,5 +1,5 @@
 (function (T, $) {
-  var $target, $toggle, datalist, $items, $search;
+  var $target, $toggle, datalist, $items, $search, $hidden;
 
   T.testStart(function () {
     $.fx.off = true;
@@ -35,7 +35,7 @@
 
   var initMultilist = function(options) {
     destroyMultilist();
-    $(document.body).append('<div id="target" style="display: none;" />');
+    $(document.body).append('<div id="target" name="target" style="display: none;" />');
     $target = $('div#target');
     $target.multilist(options || {
       datalist: datalist
@@ -43,6 +43,7 @@
     $toggle = $('a.label', $target);
     $items = $('.holder.items a', $target);
     $search = $('.holder.search input[role="search"]', $target);
+    $hidden = $('input[name="' + $target.attr('name') + '"]', $target);
   };
 
   Array.prototype.map = Array.prototype.map || function(fn) {
@@ -90,6 +91,13 @@
     initMultilist();
 
     T.equal($('.holder.items a.selected', $target).length, 2, 'Number of items with `selected\' css class should equal number of items selected');
+  });
+
+  T.test('renders a hidden input with the same name as the target div when div has a name', function() {
+    initMultilist();
+
+    T.equal(1, $hidden.length, 'Hidden input should be rendered');
+    T.equal('hidden', $hidden.attr('type'), 'Hidden input should be hidden');
   });
 
   T.module('init single');
@@ -283,12 +291,15 @@
   });
 
   T.test('serializes the chosen values', function() {
+    var expected;
     for (var i = 1; i < datalist.length; ++i) {
       initMultilist({datalist: datalist, maxSelected: i});
 
       $($items.slice(0, i)).trigger('click');
+      expected = datalist.slice(0, i).map(function(x) {return x.value;}).join('|');
 
-      T.equal($target.val(), datalist.slice(0, i).map(function(x) {return x.value;}).join('|'), 'All chosen values should be serialized');
+      T.equal($target.val(), expected, 'All chosen values should be serialized');
+      T.equal($hidden.val(), expected, 'Serialized value should be set on hidden input');
     }
   });
 
@@ -346,9 +357,12 @@
   });
 
   T.test('serializes the remaining chosen values', function() {
+    var expected = datalist.slice(1, datalist.length).map(function(x) {return x.value;}).join('|');
+
     $items.trigger('click');
 
-    T.equal($target.val(), datalist.slice(1, datalist.length).map(function(x) {return x.value;}).join('|'), 'All values except the first should be serialized')
+    T.equal($target.val(), expected, 'All values except the first should be serialized');
+    T.equal($hidden.val(), expected, 'Serialized value should also be written to hidden input');
   });
 
   /*** LIST ITEM CLICK WHEN OTHER ITEM SELECTED ***/

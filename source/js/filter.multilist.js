@@ -162,7 +162,8 @@
       '  <div class="holder items">',
       '    <ul role="listbox"></ul>',
       '  </div>',
-      '</div>'
+      '</div>',
+      '<input type="hidden" name="${name}" />'
     ].join(''),
     items: [
       '<li>',
@@ -190,8 +191,9 @@
       return this.each(function () {
         var $this = $(this).addClass(pluginName).attr('role','listbox').attr('aria-multiselectable', 'true').show();
         var t = this;
+        var name = $this.attr('name');
 
-        $.tmpl('base', attr).appendTo($this);
+        $.tmpl('base', $.extend({}, attr, {name: name})).appendTo($this);
 
         $.each(events, function (i, n) {
           $this.on(n.type, n.selector, eventCurry.bind(t, n.callback));
@@ -203,6 +205,7 @@
         attr.$search = $this.find('input');
         attr.$holder = $this.find('.holder.items');
         attr.$list = attr.$holder.find('ul');
+        attr.$hidden = $this.find('input[name="' + name + '"]');
 
         if (attr.datalist) {
           var html = $.tmpl('items', attr.datalist, {
@@ -313,6 +316,7 @@
       var serial = $.map($selected, function(n,i) { return $(n).attr('value'); }).join("|");
 
       $this.attr('value', serial).attr('aria-valuetext', serial);
+      attr.$hidden.val(serial);
 
       return serial;
     },
