@@ -99,6 +99,11 @@
 				var value = $target.attr('value');
 				var text = $target.text();
 
+        if (attr.single) {
+          attr.$items.removeClass(selectedClass);
+          $('span.labeltext', attr.$label).text(text);
+        }
+
         if ($target.hasClass(disabledClass) ||
             (!$target.hasClass(selectedClass) && attr.maxSelected > 0 && getNumSelected($this) >= attr.maxSelected)) {
           return;
@@ -107,15 +112,9 @@
         $target.toggleClass(selectedClass);
 				attr.onChange(value, text, $target.hasClass(selectedClass), $this);
 
-        var numSelected = getNumSelected($this);
-
-				if (attr.maxSelected == numSelected && attr.closeOnMax) {
+				if (attr.maxSelected == getNumSelected($this) && attr.closeOnMax) {
 					$this[pluginName]('close');
 				}
-
-        if (attr.single) {
-          $('span.labeltext', attr.$label).text(numSelected ? text : attr.labelText);
-        }
 
 				$this[pluginName]('serialize');
 			}

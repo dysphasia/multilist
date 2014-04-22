@@ -308,15 +308,29 @@
     T.equal($target.val(), datalist.slice(1, datalist.length).map(function(x) {return x.value;}).join('|'), 'All values except the first should be serialized')
   });
 
-  T.test('sets the label text back to the configured value when single is true', function() {
-    var originalText = 'this is what it said originally';
-    initMultilist({labelText: originalText, datalist: datalist, single: true});
+  T.module('list item click when other item selected', {
+    setup: function() {
+      initMultilist();
+      $toggle.trigger('click');
+      $items.first().trigger('click');
+    }
+  });
 
+  T.test('selects the new item along with the previous one', function() {
+    $items.last().trigger('click');
+
+    T.equal($items.filter('.selected').length, 2, 'Two items should now be selected');
+  });
+
+  T.test('changes the selection when single is true', function() {
+    initMultilist({datalist: datalist, single: true});
     $toggle.trigger('click');
     $items.first().trigger('click');
-    $items.first().trigger('click');
 
-    T.equal($('span.labeltext', $toggle).text().trim(), originalText, 'Label text should be reverted when there\'s no selection');
+    $toggle.trigger('click');
+    $items.last().trigger('click');
+
+    T.equal($items.filter('.selected').text(), $items.last().text(), 'Last item should now be selected');
   });
 
   T.module('remove click', {
