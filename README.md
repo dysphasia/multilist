@@ -20,7 +20,7 @@ http://rawgit.com/functionreturnfunction/multilist/master/test/test.html
 
 ### Usage
 
-Include droplist.js & droplist.css onto your webpage. jQuery & jQuery templates are also required.
+Include filter.multilist.js & filter.multilist.css onto your webpage. jQuery & jQuery templates are also required.
 
 init the plugin by calling 'multilist' on a jquery object
 
