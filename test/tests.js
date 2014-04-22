@@ -215,6 +215,22 @@
     });
   });
 
+  T.module('checkbox click when item unselected', {
+    setup: function() {
+      initMultilist();
+      $toggle.trigger('click');
+    }
+  });
+
+  T.test('selects the parent list item', function() {
+    var $firstItem = $('.holder.items a', $target).first();
+    $('div.checkbox', $firstItem).trigger('click');
+
+    T.ok($firstItem.hasClass('selected'), 'Parent item should be selected after clicking checkbox');
+  });
+
+  /*** LIST ITEM CLICK WHEN UNSELECTED ***/
+
   T.module('list item click when unselected', {
     setup: function() {
       initMultilist();
@@ -288,6 +304,8 @@
     T.equal($('span.labeltext', $toggle).text().trim(), datalist[0].text, 'Label should show selected item');
   });
 
+  /*** LIST ITEM CLICK WHEN SELECTED ***/
+
   T.module('list item click when selected', {
     setup: function() {
       initMultilist({datalist: datalist, maxSelected: 0});
@@ -307,6 +325,8 @@
 
     T.equal($target.val(), datalist.slice(1, datalist.length).map(function(x) {return x.value;}).join('|'), 'All values except the first should be serialized')
   });
+
+  /*** LIST ITEM CLICK WHEN OTHER ITEM SELECTED ***/
 
   T.module('list item click when other item selected', {
     setup: function() {

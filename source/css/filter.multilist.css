@@ -15,7 +15,7 @@
 	div.multilist .holder.label a.remove:hover { background-color:#049; }
 
 	div.multilist .holder.search { display:none; }
-	div.multilist .holder.search input { border:1px solid #eee; line-height:2em; padding:2px 5px 2px 25px; font-size:13px; width:100%; margin:0; box-sizing:border-box; -moz-box-sizing:border-box; background:#fff url(/img/libs/droplist/search.png) no-repeat 5px 50%;}
+	div.multilist .holder.search input { border:1px solid #eee; line-height:2em; padding:2px 5px 2px 25px; font-size:13px; width:100%; margin:0; box-sizing:border-box; -moz-box-sizing:border-box; background:#fff url(../img/filter.multilist.search.png) no-repeat 5px 50%;}
 	div.multilist .holder.search input:focus { outline:none; }
 
 	div.multilist .holder.items { width:100%; min-width:200px; position:absolute; overflow:hidden; z-index:50; display:none; box-shadow: 0px 0px 1px rgba(0,0,0,.2); }
@@ -34,7 +34,7 @@
 	div.multilist .holder.items > ul li a.selected { background-color: #F0AB00; color: #000000; }
 	div.multilist .holder.items > ul li a.selected:hover { background-color: #ff3333; cursor:pointer; }
 
-	div.multilist .ui-sprite { background: url(/img/libs/droplist/droplist-sprites.png); background-repeat: no-repeat; }
+	div.multilist .ui-sprite { background: url(../img/filter.multilist.sprites.png); background-repeat: no-repeat; }
 	div.multilist .ui-sprite.remove 		  { background-position: 0px 0px; }
 	div.multilist .ui-sprite.remove:hover  { background-position: 0px -18px; }
 	div.multilist li a .checkbox 	  		{ background-position: 0px -36px; }
