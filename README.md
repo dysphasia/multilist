@@ -4,13 +4,11 @@
 
 ### Introduction
 
-multilist is a jquery plugin multiple select dropdown lists with search / filtering functionality
-
+multilist is a jquery plugin multiple/single select dropdown list with search / filtering functionality, similar to what you might call a "combobox"
 
 ### License
 
-The MIT License (MIT) Copyright (c) 2014 Nicholas Ortenzio
-
+[MIT License (MIT) Copyright (c) 2014 Nicholas Ortenzio and Jason Duncan] (/LICENSE.txt)
 
 ### Demo
 
@@ -29,7 +27,6 @@ init the plugin by calling 'multilist' on a jquery object
 <code>$('#element').multilist(options);</code>
 
 ----------
-
 
 ### Options
 
