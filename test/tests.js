@@ -215,6 +215,8 @@
     });
   });
 
+  /*** CHECKBOX CLICK WHEN ITEM UNSELECTED ***/
+
   T.module('checkbox click when item unselected', {
     setup: function() {
       initMultilist();
@@ -302,6 +304,23 @@
     $items.first().trigger('click');
 
     T.equal($('span.labeltext', $toggle).text().trim(), datalist[0].text, 'Label should show selected item');
+  });
+
+  /*** CHECKBOX CLICK WHEN ITEM SELECTED ***/
+
+  T.module('checkbox click when item selected', {
+    setup: function() {
+      initMultilist();
+      $toggle.trigger('click');
+      $items.first().trigger('click');
+    }
+  });
+
+  T.test('selects the parent list item', function() {
+    var $firstItem = $('.holder.items a', $target).first();
+    $('div.checkbox', $firstItem).trigger('click');
+
+    T.ok(!$firstItem.hasClass('selected'), 'Parent item should not be selected after clicking checkbox');
   });
 
   /*** LIST ITEM CLICK WHEN SELECTED ***/
