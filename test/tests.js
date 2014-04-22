@@ -106,8 +106,14 @@
     initMultilist({single: true, maxSelected: 42, closeOnMax: false});
     var settings = $target.data().multilist;
 
-    T.equal(1, settings.maxSelected, '`maxSelected\' should be overridden and set to 1');
+    T.equal(settings.maxSelected, 1, '`maxSelected\' should be overridden and set to 1');
     T.ok(settings.closeOnMax, '`closeOnMax\' should be overridden and set to true');
+  });
+
+  T.test('does not render checkboxes for list items', function() {
+    initMultilist({datalist: datalist, single: true});
+
+    T.equal($('div.checkbox', $target).length, 0, 'No checkbox divs should be rendered in single item mode');
   });
 
   /*** CLICK WHEN CLOSED ***/

@@ -167,7 +167,7 @@
     items: [
       '<li>',
       '  <a href="#" role="option" value="${value}" class="item {{if selected}}selected{{/if}}" title="${description}" >',
-      '    <div class="ui-sprite checkbox"></div>',
+      '    {{if $item.renderCheckbox}}<div class="ui-sprite checkbox"></div>{{/if}}',
       '    ${text}',
       '  </a>',
       '</li>'
@@ -205,7 +205,9 @@
         attr.$list = attr.$holder.find('ul');
 
         if (attr.datalist) {
-          var html = $.tmpl('items', attr.datalist);
+          var html = $.tmpl('items', attr.datalist, {
+            renderCheckbox: !attr.single
+          });
           attr.$list.empty().append(html);
         }
 
