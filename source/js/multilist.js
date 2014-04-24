@@ -1,11 +1,3 @@
-/*
- *  multilist.js
- *  2014 04 16
- *  nicholas ortenzio (nicholas.ortenzio@gmail.com)
- *  requires jquery.js & jquery.tmpl.js
- */
-
-
 (function($) {
 
   /*** SHIMS ***/

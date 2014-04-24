@@ -9,7 +9,7 @@ div.multilist:hover, div.multilist.opened {background: #e8e8e8;}
 div.multilist .holder.label a.remove {background-color:#06c; color: #fff;}
 div.multilist .holder.label a.remove:hover { background-color:#049; }
 
-div.multilist .holder.search input {border:1px solid #eee; background:#fff url(../img/filter.multilist.search.png) no-repeat 5px 50%;}
+div.multilist .holder.search input {border:1px solid #eee; background:#fff url(../img/multilist.search.png) no-repeat 5px 50%;}
 
 div.multilist .holder.items > ul > li > a { background-color:#f2f2f2;}
 div.multilist .holder.items > ul > li > a:hover { background-color: #33aaff; color: #000000; }
@@ -19,7 +19,7 @@ div.multilist .holder.items > ul li a:hover { background-color: #33aaff; color: 
 div.multilist .holder.items > ul li a.selected { background-color: #F0AB00; color: #000000; }
 div.multilist .holder.items > ul li a.selected:hover { background-color: #ff3333; }
 
-div.multilist .ui-sprite { background: url(../img/filter.multilist.sprites.png); background-repeat: no-repeat; }
+div.multilist .ui-sprite { background: url(../img/multilist.sprites.png); background-repeat: no-repeat; }
 
 @media screen and (min-width: 480px) and (max-width: 759px) {
   div.multilist > .holder > ul li a:hover { background-color:#f2f2f2; color: #000000; }
