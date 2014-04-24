@@ -20,7 +20,7 @@ http://rawgit.com/functionreturnfunction/multilist/master/test/test.html
 
 ### Usage
 
-1. Include release/multilist-<version>.min.js & release/multilist-<version>.min.css onto your webpage. jQuery & jQuery templates are also required, as well as any images in the release/ directory.
+1. Include release/multilist-&lt;version&gt;.min.js & release/multilist-&lt;version&gt;.min.css onto your webpage. jQuery & jQuery templates are also required, as well as any images in the release/ directory.
 
 2. Init the plugin by calling 'multilist' on a jquery object:
 
