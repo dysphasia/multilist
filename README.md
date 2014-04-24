@@ -12,7 +12,7 @@ multilist is a jquery plugin multiple/single select dropdown list with search / 
 
 ### Demo
 
-http://rawgit.com/functionreturnfunction/multilist/master/demo/multilist.html
+http://rawgit.com/functionreturnfunction/multilist/release/demo.html
 
 ### Tests
 
@@ -58,7 +58,7 @@ http://rawgit.com/functionreturnfunction/multilist/master/test/test.html
 > 		text: (string),
 > 		selected:(true|false)[optional],
 > 		fields:([string,...])[optional]
->		}
+>	}
 
 
 #####enableSearch
