@@ -4,6 +4,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-blanket-qunit');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   var pkg = grunt.file.readJSON('package.json');
   var licenseDoc = grunt.file.read('LICENSE.txt');
@@ -31,10 +33,58 @@ module.exports = function(grunt) {
       }
     },
 
+    clean: {
+      release: ['release/']
+    },
+
+    copy: {
+      release_js: {
+        expand: true,
+        src: 'source/js/*.js',
+        dest: 'release/',
+        flatten: true,
+        filter: 'isFile'
+      },
+
+      release_css: {
+        expand: true,
+        src: 'source/css/*.css',
+        dest: 'release/',
+        flatten: true,
+        filter: 'isFile',
+        options: {
+          process: function(content, srcpath) {
+            return content.replace(/\.\.\/img\//g, '');
+          }
+        }
+      },
+
+      release_demo: {
+        src: 'demo/' + pkg.name + '.html',
+        dest: 'release/demo.html',
+        flatten: true,
+        filter: 'isFile',
+        options: {
+          process: function(content, srcpath) {
+            return content.replace(/\.\.\/source\/(?:j|cs)s\/(.+)\.(js|css)/g,
+                                   '$1-' + pkg.version + '.min.$2');
+          }
+        }
+      },
+
+      release_images: {
+        expand: true,
+        src: 'source/img/*',
+        dest: 'release/',
+        flatten: true,
+        filter: 'isFile'
+      }
+    },
+
     cssmin: {
       css: {
-        src: 'source/css/' + pkg.name + '.css',
-        dest: 'release/' + pkg.name + '-' + pkg.version + '-min.css'
+        src: 'release/' + pkg.name + '.css',
+        dest: 'release/' + pkg.name + '-' + pkg.version + '.min.css'
       }
     },
 
@@ -48,9 +98,9 @@ module.exports = function(grunt) {
     }
   };
 
-  cfg.uglify.js.files['release/' + pkg.name + '-' + pkg.version + '-min.js'] = ['source/js/' + pkg.name + '.js'];
+  cfg.uglify.js.files['release/' + pkg.name + '-' + pkg.version + '.min.js'] = ['release/' + pkg.name + '.js'];
 
   grunt.initConfig(cfg);
 
-  grunt.registerTask('release', ['cssmin:css', 'uglify:js']);
+  grunt.registerTask('release', ['clean:release', 'copy', 'cssmin:css', 'uglify:js']);
 };

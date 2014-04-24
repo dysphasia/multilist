@@ -20,9 +20,9 @@ http://rawgit.com/functionreturnfunction/multilist/master/test/test.html
 
 ### Usage
 
-Include filter.multilist.js & filter.multilist.css onto your webpage. jQuery & jQuery templates are also required.
+1. Include release/multilist-<version>.min.js & release/multilist-<version>.min.css onto your webpage. jQuery & jQuery templates are also required, as well as any images in the release/ directory.
 
-init the plugin by calling 'multilist' on a jquery object
+2. Init the plugin by calling 'multilist' on a jquery object:
 
 <code>$('#element').multilist(options);</code>
 
@@ -45,8 +45,6 @@ init the plugin by calling 'multilist' on a jquery object
 > **Default:** false
 
 > if true, will trigger the plugin to close when the number of selected items is equal to the value of the maxSelected option
-
-
 
 #####datalist
 > **type:** Object Array (optional)
