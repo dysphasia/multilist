@@ -93,6 +93,24 @@
     T.equal($('.holder.items a.selected', $target).length, 2, 'Number of items with `selected\' css class should equal number of items selected');
   });
 
+  T.test('renders items datalist items where keys are capitalized', function() {
+    datalist[0].selected = datalist[1].selected = true;
+    datalist = $.map(datalist, function(item) {
+      return {Text: item.text, Value: item.value, Selected: item.selected};
+    });
+
+    initMultilist({datalist: datalist});
+
+    $items.each(function(i, e) {
+      var item = datalist[i];
+      var $e = $(e);
+
+      T.equal($e.attr('value'), item.Value, '`value\' attribute of item should be set to datalist item value');
+      T.equal($e.text().trim(), item.Text, 'Text of item should contain datalist item text');
+    });
+    T.equal($('.holder.items a.selected', $target).length, 2, 'Number of items with `selected\' css class should equal number of items selected');
+  });
+
   T.test('renders a hidden input with the same name as the target div when div has a name', function() {
     initMultilist();
 
