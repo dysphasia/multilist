@@ -200,6 +200,13 @@
         attr.$hidden = $this.find('input[name="' + name + '"]');
 
         if (attr.datalist) {
+          attr.datalist = $.map(attr.datalist, function(item) {
+            return {
+              text: caseInsensitiveAttr(item, 'text'),
+              value: caseInsensitiveAttr(item, 'value'),
+              selected: caseInsensitiveAttr(item, 'selected')
+            };
+          });
           var html = $.tmpl('items', attr.datalist, {
             renderCheckbox: !attr.single
           });
@@ -374,6 +381,11 @@
     return $this.find('.' + selectedClass).length;
   };
 
+  var caseInsensitiveAttr = function(obj, attr) {
+    var val = obj[attr];
+    return val == undefined ?
+      obj[attr.charAt(0).toUpperCase() + attr.slice(1)] : val;
+  };
 
   /*** COURIERS ***/
 
