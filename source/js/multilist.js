@@ -199,6 +199,12 @@
         attr.$list = attr.$holder.find('ul');
         attr.$hidden = $this.find('input[name="' + name + '"]');
 
+        $.each($this.prop('attributes'), function() {
+          if (this.name.indexOf('data-') > -1) {
+            attr.$hidden.attr(this.name, this.value);
+          }
+        });
+
         if (attr.datalist) {
           attr.datalist = $.map(attr.datalist, function(item) {
             return {

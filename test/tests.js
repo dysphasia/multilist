@@ -33,10 +33,11 @@
     }
   };
 
-  var initMultilist = function(options) {
+  var initMultilist = function(options, attributes) {
     destroyMultilist();
     $(document.body).append('<div id="target" name="target" style="display: none;" />');
     $target = $('div#target');
+    $target.attr(attributes || {});
     $target.multilist(options || {
       datalist: datalist
     });
@@ -116,6 +117,18 @@
 
     T.equal(1, $hidden.length, 'Hidden input should be rendered');
     T.equal('hidden', $hidden.attr('type'), 'Hidden input should be hidden');
+  });
+
+  T.test('copies any HTML5 data-* attributes from target to hidden input', function() {
+    var attr = {
+      'data-val': 'foo',
+      'data-foobar': 'baz'
+    };
+    initMultilist(null, attr);
+
+    $.each(attr, function(key, value) {
+      T.equal($hidden.attr(key), value, 'Should copy any data-* attributes');
+    });
   });
 
   T.module('init single');
