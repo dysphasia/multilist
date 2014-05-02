@@ -225,6 +225,7 @@
         }
 
         attr.$items  = attr.$list.find('a');
+        $this.removeAttr('name');
 
         $this.data(pluginName, attr);
       });

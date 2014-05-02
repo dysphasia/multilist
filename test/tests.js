@@ -44,7 +44,7 @@
     $toggle = $('a.label', $target);
     $items = $('.holder.items a', $target);
     $search = $('.holder.search input[role="search"]', $target);
-    $hidden = $('input[name="' + $target.attr('name') + '"]', $target);
+    $hidden = $('input[name="target"]', $target);
   };
 
   Array.prototype.map = Array.prototype.map || function(fn) {
@@ -115,8 +115,14 @@
   T.test('renders a hidden input with the same name as the target div when div has a name', function() {
     initMultilist();
 
-    T.equal(1, $hidden.length, 'Hidden input should be rendered');
-    T.equal('hidden', $hidden.attr('type'), 'Hidden input should be hidden');
+    T.equal($hidden.length, 1, 'Hidden input should be rendered');
+    T.equal($hidden.attr('type'), 'hidden', 'Hidden input should be hidden');
+  });
+
+  T.test('removes the name attribute from the target div (breaks unobtrusive validation)', function() {
+    initMultilist();
+
+    T.deepEqual($target.attr('name'), undefined, 'Name attribute should be removed');
   });
 
   T.test('copies any HTML5 data-* attributes from target to hidden input', function() {
