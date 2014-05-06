@@ -309,7 +309,7 @@
     open: function ($this, attr) {
       attr.$shell.appendTo($('body'));
 
-      var $thisPosition = attr.$this.position();
+      var $thisPosition = attr.$this.offset();
 
       attr.$shell.css({
         top: $thisPosition.top + attr.$this.height(),

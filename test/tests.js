@@ -469,8 +469,28 @@
     expectedPosition.top = expectedPosition.top + $target.height();
     $toggle.trigger('click');
 
-    T.equal($targetShell.css('top'), expectedPosition.top + 'px', 'Should no longer exist within the document');
-    T.equal($targetShell.css('left'), expectedPosition.left + 'px', 'Should no longer exist within the document');
+    T.equal($targetShell.css('top'), expectedPosition.top + 'px');
+    T.equal($targetShell.css('left'), expectedPosition.left + 'px');
   });
+
+  T.test('shell is positioned directly underneath multilist parent when parent has a bunch of offset parents', function () {
+    var offsetParent = $('<div></div>');
+    $('body').append(offsetParent);
+    offsetParent.css({
+      margin: 10,
+      padding: 10,
+      top: 10,
+      left: 10,
+      position: 'relative'
+    });
+    $target.appendTo(offsetParent);
+    var expectedPosition = $target.offset();
+    expectedPosition.top = expectedPosition.top + $target.height();
+    $toggle.trigger('click');
+
+    T.equal($targetShell.css('top'), expectedPosition.top + 'px');
+    T.equal($targetShell.css('left'), expectedPosition.left + 'px');
+  });
+
 
 } (QUnit, jQuery));
