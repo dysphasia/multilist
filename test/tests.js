@@ -1,5 +1,5 @@
 (function (T, $) {
-  var $target, $toggle, datalist, $items, $search, $hidden;
+  var $target, $targetShell, $toggle, datalist, $items, $search, $hidden;
 
   T.testStart(function () {
     $.fx.off = true;
@@ -30,6 +30,7 @@
     if ($target) {
       $target.remove();
       $target = null;
+      $targetShell.remove();
     }
   };
 
@@ -41,9 +42,10 @@
     $target.multilist(options || {
       datalist: datalist
     });
+    $targetShell = $('.multilist-shell', $target);
     $toggle = $('a.label', $target);
-    $items = $('.holder.items a', $target);
-    $search = $('.holder.search input[role="search"]', $target);
+    $items = $('.multilist-holder.items a', $targetShell);
+    $search = $('.multilist-holder.search input[role="search"]', $targetShell);
     $hidden = $('input[name="target"]', $target);
   };
 
@@ -91,7 +93,7 @@
 
     initMultilist();
 
-    T.equal($('.holder.items a.selected', $target).length, 2, 'Number of items with `selected\' css class should equal number of items selected');
+    T.equal($('.multilist-holder.items a.selected', $target).length, 2, 'Number of items with `selected\' css class should equal number of items selected');
   });
 
   T.test('renders items datalist items where keys are capitalized', function() {
@@ -109,7 +111,7 @@
       T.equal($e.attr('value'), item.Value, '`value\' attribute of item should be set to datalist item value');
       T.equal($e.text().trim(), item.Text, 'Text of item should contain datalist item text');
     });
-    T.equal($('.holder.items a.selected', $target).length, 2, 'Number of items with `selected\' css class should equal number of items selected');
+    T.equal($('.multilist-holder.items a.selected', $target).length, 2, 'Number of items with `selected\' css class should equal number of items selected');
   });
 
   T.test('renders a hidden input with the same name as the target div when div has a name', function() {
@@ -181,7 +183,7 @@
   T.test('shows items', function() {
     $toggle.trigger('click');
 
-    var $itemsHolder = $('div.items', $target);
+    var $itemsHolder = $('div.items', $targetShell);
 
     T.ok($itemsHolder.length == 1, 'Items holder element should be created');
     T.ok($itemsHolder.is(':visible'), 'Items holder element should be made visible');
@@ -237,17 +239,17 @@
     $search.val(item.text.substring(0, 1));
     $search.trigger('keyup');
 
-    T.ok(!$('.holder.items a', $target).hasClass('filtered'), 'Should not filter after only 1 character');
+    T.ok(!$('.multilist-holder.items a', $targetShell).hasClass('filtered'), 'Should not filter after only 1 character');
 
     $search.val(item.text.substring(0, 2));
     $search.trigger('keyup');
 
-    T.ok(!$('.holder.items a', $target).hasClass('filtered'), 'Should not filter after only 2 characters');
+    T.ok(!$('.multilist-holder.items a', $targetShell).hasClass('filtered'), 'Should not filter after only 2 characters');
 
     $search.val(item.text.substring(0, 3));
     $search.trigger('keyup');
 
-    T.ok($('.holder.items a', $target).hasClass('filtered'), 'Should have some items filtered');
+    T.ok($('.multilist-holder.items a', $targetShell).hasClass('filtered'), 'Should have some items filtered');
   });
 
   T.test('filters items which don\'t match the entered text', function() {
@@ -256,7 +258,7 @@
     $search.val(searchStr);
     $search.trigger('keyup');
 
-    $('a.filtered', $target).each(function(i, e) {
+    $('a.filtered', $targetShell).each(function(i, e) {
       var text = $(e).text();
       T.equal(text.indexOf(searchStr), -1, 'Item with text `' + text.trim() + '\' which does not match search string `' + searchStr + '\' should be filtered');
     });
@@ -276,7 +278,7 @@
   });
 
   T.test('selects the parent list item', function() {
-    var $firstItem = $('.holder.items a', $target).first();
+    var $firstItem = $('.multilist-holder.items a', $targetShell).first();
     $('div.checkbox', $firstItem).trigger('click');
 
     T.ok($firstItem.hasClass('selected'), 'Parent item should be selected after clicking checkbox');
@@ -292,7 +294,7 @@
   });
 
   T.test('selects the clicked item', function() {
-    var $firstItem = $('.holder.items a', $target).first().trigger('click');
+    var $firstItem = $('.multilist-holder.items a', $targetShell).first().trigger('click');
 
     T.ok($firstItem.hasClass('selected'), 'Should be selected after clicking');
   });
@@ -303,7 +305,7 @@
       called = true;
     }});
 
-    $('.holder.items a', $target).first().trigger('click');
+    $('.multilist-holder.items a', $target).first().trigger('click');
 
     T.ok(called, 'Should call the onChange callback');
   });
@@ -334,7 +336,7 @@
 
       $($items.slice(0, i)).trigger('click');
       expected = datalist.slice(0, i).map(function(x) {return x.value;}).join('|');
-
+      
       T.equal($target.val(), expected, 'All chosen values should be serialized');
       T.equal($hidden.val(), expected, 'Serialized value should be set on hidden input');
     }
@@ -371,7 +373,7 @@
   });
 
   T.test('selects the parent list item', function() {
-    var $firstItem = $('.holder.items a', $target).first();
+    var $firstItem = $('.multilist-holder.items a', $target).first();
     $('div.checkbox', $firstItem).trigger('click');
 
     T.ok(!$firstItem.hasClass('selected'), 'Parent item should not be selected after clicking checkbox');
@@ -435,10 +437,40 @@
     }
   });
 
-  T.test('removes the target from the document completely', function() {
+  T.test('removes the target from the document completely', function () {
     $('a.remove', $target).trigger('click');
 
     T.equal(0, $($target.selector).length, 'Should no longer exist within the document');
+  });
+
+  T.test('removes the target shell from the document completely', function () {
+    $('a.remove', $target).trigger('click');
+    // Can't use $targetShell.selector for this as the selector won't be 
+    // valid after the shell is attached to the body.
+    T.equal(false, $.contains(document, $targetShell[0]), 'Should no longer exist within the document');
+  });
+
+
+  T.module('ui', {
+    setup: function () {
+      initMultilist({ datalist: datalist, canRemove: true });
+    }
+  });
+
+  T.test('shell is the same width as the multilist parent', function () {
+    $target.width(400); // need to set width so the widths aren't the default css values.
+    $toggle.trigger('click');
+
+    T.equal($targetShell.width(), $target.width());
+  });
+
+  T.test('shell is positioned directly underneath multilist parent', function () {
+    var expectedPosition = $target.position();
+    expectedPosition.top = expectedPosition.top + $target.height();
+    $toggle.trigger('click');
+
+    T.equal($targetShell.css('top'), expectedPosition.top + 'px', 'Should no longer exist within the document');
+    T.equal($targetShell.css('left'), expectedPosition.left + 'px', 'Should no longer exist within the document');
   });
 
 } (QUnit, jQuery));
