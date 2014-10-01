@@ -13,3 +13,7 @@
 ## 0.9.1
 
 - Fixed a positioning issue when an ancestor has margin/padding/offset
+
+## 0.9.2
+
+- If mode is single and an item is selected when the page loads, the item gets clicked so the value is actually set.

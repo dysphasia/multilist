@@ -236,6 +236,10 @@
         $this.removeAttr('name');
 
         $this.data(pluginName, attr);
+
+        if (attr.single) {
+          $(attr.$items.selector + '.' + selectedClass).trigger('click');
+        }
       });
     },
 
