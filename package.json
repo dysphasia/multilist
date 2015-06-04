@@ -1,6 +1,6 @@
 {
   "name": "multilist",
-  "version": "0.9.2",
+  "version": "0.9.3",
   "devDependencies": {
     "grunt": "^0.4.4",
     "grunt-contrib-jshint": "^0.10.0",
