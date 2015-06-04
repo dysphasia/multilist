@@ -513,6 +513,7 @@
     T.equal($target.attr('aria-valuetext'), '', 'This aria-value should be empty');
     T.equal($target.attr('value'), '', 'This value should be empty');
     T.equal($('span.labeltext').text(), '--select here--', 'Label text should be reset to default')
+    T.equal($hidden.val(), '', 'hidden value empty');
   });
 
 
