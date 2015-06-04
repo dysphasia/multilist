@@ -251,6 +251,7 @@
       $this.attr('value', '').attr('aria-valuetext', '');
       // this resets the selected text
       $('span.labeltext', attr.$label).text(attr.labelText);
+      attr.$hidden.val('');
     },
 
     close: function ($this, attr) {
