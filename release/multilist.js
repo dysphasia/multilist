@@ -56,29 +56,17 @@
   var labelClass = 'label';
   var multiClass = 'multi';
   var searchClass = 'search';
+  var shellClass = 'multilist-shell';
 
   /*** EVENTS ***/
 
-  var events = [
+  var shellEvents = [
     {
       type: 'keyup',
       selector: 'input[role="search"]',
       callback: function ($this, $target, e) {
         var value = $target.val().toLowerCase();
         $this[pluginName]('filter', value);
-      }
-    },
-    {
-      type: 'click',
-      selector: 'a.label',
-      callback: function ($this, $target, e) {
-        e.preventDefault();
-
-        if ($this.hasClass(disabledClass)) {
-          return;
-        }
-
-        $this[pluginName]($this.hasClass(openClass) ? 'close' : 'open');
       }
     },
     {
@@ -114,6 +102,21 @@
 
         $this[pluginName]('serialize');
       }
+    }
+  ];
+
+  var events = [
+    {
+      type: 'click',
+      selector: 'a.label',
+      callback: function ($this, $target, e) {
+        e.preventDefault();
+        if ($this.hasClass(disabledClass)) {
+          return;
+        }
+
+        $this[pluginName]($this.hasClass(openClass) ? 'close' : 'open');
+      }
     },
     {
       type: 'click',
@@ -123,36 +126,37 @@
 
         $this[pluginName]('remove', true);
       }
+    },
+    {
+      type: 'click',
+      selector: 'div.label span.add',
+      callback: function ($this, $target, e) {
+        $('a.label', $target.parent()).trigger('click');
+      }
     }
   ];
-
-  events.push({
-    type: 'click',
-    selector: 'div.label span.add',
-    callback: function ($this, $target, e) {
-      $('a.label', $target.parent()).trigger('click');
-    }
-  });
 
   /*** TEMPLATES ***/
 
   var templates = {
     base: [
       '<div class="inner">',
-      '  <div class="holder label {{if canRemove}}removable{{/if}}">',
+      '  <div class="multilist-holder label {{if canRemove}}removable{{/if}}">',
       '    <span class="ui-sprite add">+</span>',
       '    <a href="#" class="label">',
       '      <span class="labeltext">${labelText}</span>',
       '    </a>',
       '    {{if canRemove}}<a href="#" class="remove">x</a>{{/if}}',
       '  </div>',
-      '  {{if enableSearch}}',
-      '  <div class="holder search">',
-      '    <input role="search" placeholder="Search" spellcheck="false" autocorrect="false" type="text" />',
-      '  </div>',
-      '  {{/if}}',
-      '  <div class="holder items">',
-      '    <ul role="listbox"></ul>',
+      '  <div class="multilist-shell">',
+      '    {{if enableSearch}}',
+      '    <div class="multilist-holder search">',
+      '      <input role="search" placeholder="Search" spellcheck="false" autocorrect="false" type="text" />',
+      '    </div>',
+      '    {{/if}}',
+      '    <div class="multilist-holder items">',
+      '      <ul role="listbox"></ul>',
+      '    </div>',
       '  </div>',
       '</div>',
       '<input type="hidden" name="${name}" />'
@@ -177,29 +181,46 @@
   var methods = {
 
     init: function(options) {
-
-      var attr = $.extend({}, defaults, options);
-
       return this.each(function () {
-        var $this = $(this).addClass(pluginName).attr('role','listbox').attr('aria-multiselectable', 'true').show();
+        var attr = $.extend({}, defaults, options);
+
+        var $this = $(this).addClass(pluginName).attr('role', 'listbox').attr('aria-multiselectable', 'true').show();
         var t = this;
         var name = $this.attr('name');
 
         $.tmpl('base', $.extend({}, attr, {name: name})).appendTo($this);
 
+        attr.$this = $this;
+        attr.$label = $this.find('.multilist-holder.label');
+        attr.$shold = $this.find('.multilist-holder.search');
+        attr.$search = $this.find('input');
+        attr.$holder = $this.find('.multilist-holder.items');
+        attr.$list = attr.$holder.find('ul');
+        attr.$hidden = $this.find('input[name="' + name + '"]');
+        attr.$shell = $this.find('.'+shellClass);
+
         $.each(events, function (i, n) {
           $this.on(n.type, n.selector, eventCurry.bind(t, n.callback));
         });
 
-        attr.$this = $this;
-        attr.$label = $this.find('.holder.label');
-        attr.$shold = $this.find('.holder.search');
-        attr.$search = $this.find('input');
-        attr.$holder = $this.find('.holder.items');
-        attr.$list = attr.$holder.find('ul');
-        attr.$hidden = $this.find('input[name="' + name + '"]');
+        $.each(shellEvents, function (i, n) {
+          attr.$shell.on(n.type, n.selector, eventCurry.bind(t, n.callback));
+        });
+
+        $.each($this.prop('attributes'), function() {
+          if (this.name.indexOf('data-') > -1) {
+            attr.$hidden.attr(this.name, this.value);
+          }
+        });
 
         if (attr.datalist) {
+          attr.datalist = $.map(attr.datalist, function(item) {
+            return {
+              text: caseInsensitiveAttr(item, 'text'),
+              value: caseInsensitiveAttr(item, 'value'),
+              selected: caseInsensitiveAttr(item, 'selected')
+            };
+          });
           var html = $.tmpl('items', attr.datalist, {
             renderCheckbox: !attr.single
           });
@@ -212,9 +233,25 @@
         }
 
         attr.$items  = attr.$list.find('a');
+        $this.removeAttr('name');
 
         $this.data(pluginName, attr);
+
+        if (attr.single) {
+          $(attr.$items.selector + '.' + selectedClass).trigger('click');
+        }
       });
+    },
+
+    clear: function ($this, attr) {
+      var $selected = attr.$items.filter('.' + selectedClass);
+      // removed the selected styles
+      $selected.removeClass(selectedClass).attr('aria-selected', 'false');
+      // remove the selected values
+      $this.attr('value', '').attr('aria-valuetext', '');
+      // this resets the selected text
+      $('span.labeltext', attr.$label).text(attr.labelText);
+      attr.$hidden.val('');
     },
 
     close: function ($this, attr) {
@@ -225,13 +262,15 @@
       }
 
       if (attr.enableSearch) {
-        attr.$shold.hide();
         attr.$search.val('');
         attr.$items.removeClass(filteredClass);
       }
 
-      attr.$holder.slideUp(attr.transitionSpeed, function () {
+      attr.$shell.slideUp(attr.transitionSpeed, function () {
         $this.removeClass(openClass);
+        attr.$shold.hide();
+        attr.$shell.appendTo($this);
+        attr.$shell.hide();
       });
     },
 
@@ -254,12 +293,10 @@
     },
 
     disable: function ($this, attr) {
-
       $this.addClass(disabledClass);
     },
 
     enable: function ($this, attr) {
-
       $this.removeClass(disabledClass);
     },
 
@@ -285,13 +322,23 @@
     },
 
     open: function ($this, attr) {
+      attr.$shell.appendTo($('body'));
+
+      var $thisPosition = attr.$this.offset();
+
+      attr.$shell.css({
+        top: $thisPosition.top + attr.$this.height(),
+        left: $thisPosition.left,
+        width: attr.$this.width()
+      });
+      attr.$holder.show();
+
       if (attr.enableSearch) {
         attr.$shold.show();
-        attr.$search.focus();
       }
-
-      attr.$holder.slideDown(attr.transitionSpeed, function() {
+      attr.$shell.slideDown(attr.transitionSpeed, function() {
         $this.addClass(openClass);
+        attr.$search.focus();
       });
     },
 
@@ -300,6 +347,7 @@
         attr.onRemove($this);
       }
 
+      attr.$shell.appendTo($this);
       $this.remove();
     },
 
@@ -309,7 +357,6 @@
 
       $this.attr('value', serial).attr('aria-valuetext', serial);
       attr.$hidden.val(serial);
-
       return serial;
     },
 
@@ -370,10 +417,16 @@
     $elm.addClass(filteredClass);
   };
 
-  var getNumSelected = function($this) {
-    return $this.find('.' + selectedClass).length;
+  var getNumSelected = function ($this) {
+    var attr = $this.data(pluginName);
+    return attr.$holder.find('.' + selectedClass).length;
   };
 
+  var caseInsensitiveAttr = function(obj, attr) {
+    var val = obj[attr];
+    return val == undefined ?
+      obj[attr.charAt(0).toUpperCase() + attr.slice(1)] : val;
+  };
 
   /*** COURIERS ***/
 

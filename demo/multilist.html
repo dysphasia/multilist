@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
   <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" >
@@ -14,11 +14,18 @@
 
   <body>
     <div class="container">
-      <div id="multi" name="multi"></div>
+      <div id="multi" name="multi" style="width:300px;"></div>
       <div id="two" name="two"></div>
       <div id="single" name="single"></div>
       <div id="removable" name="removable"></div>
+      <div style="overflow:hidden; height:40px; background-color:lightblue;">
+        <div id="overflowhidden" name="overflowhidden"></div>
+      </div>
     </div>
+      
+      <div style="position:relative; margin-top:32px; padding-top:15px;">
+          <div id="offset"></div>  
+      </div>
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
@@ -74,6 +81,16 @@
         labelText: 'This Is Removable',
         canRemove: true,
         datalist: datalist
+      });
+
+      $('#overflowhidden').multilist({
+          labelText: 'This is inside an overflow hidden div',
+          datalist: datalist
+      });
+
+      $('#offset').multilist({
+          labelText: 'This is inside an offset parent',
+          datalist: datalist
       });
     </script>
   </body>

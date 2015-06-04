@@ -142,6 +142,13 @@ droplist makes a number of methods publicly accessible without breaking jQuery o
 
 `$('#element').multilist('methodname', [arguments...])`
 
+#####clear
+
+> **parameters:** none
+
+> **returns:** jQuery object
+
+> clears the selected option(s)
 
 #####close
 
